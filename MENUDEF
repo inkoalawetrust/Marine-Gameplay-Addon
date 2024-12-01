@@ -1,0 +1,42 @@
+AddOptionMenu "OptionsMenu"
+{
+	Submenu "Marine Gameplay Addon Settings", "Marine Gameplay Options"
+}
+
+OptionMenu "Marine Gameplay Options"
+{
+	Submenu "Difficulty settings", "Difficulty settings"
+    Submenu "Monster replacements", "Monster replacements"
+	Submenu "Item replacements", "Item replacements"
+}
+
+//Sub menus
+OptionMenu "Difficulty settings"
+{
+	Title "Marine difficulty settings"
+	StaticText "Controls how strong the marines are in terms of stats and abilities.", Gray
+	//Option 
+	
+	Submenu "Restricted actions", "Restricted actions"
+}
+
+OptionMenu "Restricted actions"
+{
+	Title "Restricted actions"
+	StaticText "Actions that the marines are just forbidden from performing.", Gray
+}
+
+OptionMenu "Monster replacements"
+{
+    Title "Monster replacements"
+	StaticText "Sets the specific chances of any particular vanilla monster to be replaced by marines.", Gray
+	StaticText "0 is never, 255 is always", Gray
+    Slider "Zombieman", "SMGR_Zombieman", 0, 255, 5
+}
+
+OptionMenu "Item replacements"
+{
+    Title "Item replacements"
+	StaticText "Sets the specific chances of any particular item to be replaced by a custom item.", Gray
+	StaticText "0 is never, 255 is always", Gray
+}

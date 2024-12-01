@@ -14,7 +14,7 @@ items it replaces and the chances of it doing so. Also need to handle stuff like
 if it couldn't teleport all the marines it has "stored".*/
 //And option to make marines phase through allies like players, oh, also to make them immune to all friendly damage. And also making them go through monster block lines.
 //Add a setting to make the marine that replaces a specific class try to generally conform to its' threat level. i.e zombieman-replacing marines are weak as shit
-
+//Add a setting to have a chance of replacing the chaingun with the marines' rifle.
 
 //IDEA:
 //Add a customizable "SpawnMarine" console command/netevent, like for specified marine color, armor, user variables, that stuff.
