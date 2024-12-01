@@ -8,7 +8,8 @@ Or to only affect pre-placed marines that have no custom user variable values at
 /*Make a beacon teleporter item (With customizable marine amounts and stuff), that when thrown, spawns some amount of friendly marines. Also add settings for which
 items it replaces and the chances of it doing so. Also need to handle stuff like crammed spaces with it and shit, maybe like making it so you can pick it up again
 if it couldn't teleport all the marines it has "stored".*/
-//And option to make marines phase through allies like players, oh, also to make them immune to all friendly damage. And also making them
+//And option to make marines phase through allies like players, oh, also to make them immune to all friendly damage. And also making them go through monster block lines.
+//Add a setting to make the marine that replaces a specific class try to generally conform to its' threat level. i.e zombieman-replacing marines are weak as shit
 
 
 //IDEA:
@@ -18,7 +19,10 @@ if it couldn't teleport all the marines it has "stored".*/
 
 //#Include "ZScript/Token.zsc" //TODO: Move the SMGameplay_Token I'll likely need there.
 
-Class SMGameplay_Handler : EventHandler{}
+Class SMGameplay_Handler : EventHandler
+{
+	
+}
 
 //NOTE: We'll need this for shit like making marines immune to friendly damage, maybe even stuff like functioning like an action restrictor and clipping through allies.
 Class SMGameplay_Token : Inventory

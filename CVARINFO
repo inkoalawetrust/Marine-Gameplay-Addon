@@ -1,0 +1,9 @@
+/*TODO: Apparently Ricardo/Jay added ZScript CVar handlers when I wasn't looking, use them to also clamp CVars
+when they're modified directly from the console. Mainly the actor replacement chance CVARs, which I'll route through
+the same CVar handler.*/
+
+Server Bool SMGameplay_NerfEnemyMarines = False;
+Server Bool SMGameplay_NerfFriendMarines = False;
+
+Server Bool SMGameplay_SkillScaling = True; //Skill based matchmaking.
+Server Bool SMGameplay_PowerScaling = True; //Try to conform the marine to the threat level of what it replaced.
