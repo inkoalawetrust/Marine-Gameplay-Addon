@@ -1,5 +1,9 @@
 Version "4.12"
 
+//URGENT:
+/*Ah fuck, uh, should they actually replace anything by default? Like replacing former humans with weak marines often, and lower chances of replacing stronger demons
+like Mancubi? Or only replace the blursphere with beacons by default or something? Maybe I should make a poll on my server about this.*/
+
 //TODO:
 //Add options for replacing specific monsters, with marines. With chances from 0-255 instead of bools, for finer control, maybe some presets too.
 //Add options for nerfing enemy and friendly marines separetely.
@@ -19,9 +23,61 @@ if it couldn't teleport all the marines it has "stored".*/
 
 //#Include "ZScript/Token.zsc" //TODO: Move the SMGameplay_Token I'll likely need there.
 
+/*HACK: For fucks sake, there's no way to pass what actor replaced who in CheckReplacement(), so for SMGameplay_Powerscaling to work I need to do shit like make
+Arachnotrons be replaced by a specific SM_Marine child class, so that I can check in CheckReplacee() if THAT stupid hack bastard child is replacing something, to be
+able to properly mark the marine as replacing the Arachnotron. Besides being an awful hack, it also has the fun side effect of making it fucking impossible if I add
+the ability to replace other unsupported NPCs with marines, to have the marines conform to the threat level of who they're replacing.
+
+So if you got Doomless loaded or something, and want to replace a guy from it with a marine, the marine won't be able to have their abilities and stats adjusted
+to match him.
+
+UPDATE: Okay, we'll see. Frankly, I might just fucking not add SMGameplay_PowerScaling, at least I add a passable text field for the replacement system as a PR.
+*/
+Class SMGR_Marine : SM_Marine{}
+
 Class SMGameplay_Handler : EventHandler
 {
+	//Handle replacing NPCs and shit with marines.
+	Override Void CheckReplacement (ReplaceEvent E)
+	{
+		Super.CheckReplacement (E);
+		
+		If (SMGR_Zombieman != 0 && E.Replacee == 'Zombieman' && Random (0,255) < SMGR_Zombieman)
+			E.Replacement = "SMGR_Marine";
+		
+		E.IsFinal = True; //It's the final countdown, dooodooodooodooo, dooo-
+	}
 	
+	/*Override Void CheckReplacee (ReplacedEvent E)
+	{
+		Super.CheckReplacee (E);
+		if (e.replacee == null) console.printf ("oh, %s is replacing nothing in particular, huh?",e.replacement.getclassname()); 
+		If (E.Replacement == 'SMGR_Marine' && e.replacee)
+			console.printf ("the marinator is replacing SOMETHING I GUESS, is it %s?",e.replacee.getclassname());
+		
+		E.IsFinal = True; //It's the final countdown, dooodooodooodooo, dooo-
+	}*/
+	
+	Override Void WorldThingSpawned (WorldEvent E)
+	{
+		Super.WorldThingSpawned (E);
+		
+		If (E.Thing && E.Thing Is "SMGR_Marine")
+		{
+			string wordy = E.Thing.GetReplacee(E.Thing.GetClass()).GetClassName();
+			if (kai_debugprintmessages) console.printf ("%s was replaced by a marine, e.thing class is %s",wordy,E.Thing.GetClassname());
+		}
+	}
+}
+
+//Clamp actor replacement values between 0 and 255.
+Class SMGameplay_ReplaceClamp : CustomIntCVAR
+{
+	Override Int ModifyValue (Name CVarName, Int Val)
+	{
+		if (kai_debugprintmessages) console.printf ("%s value was %d, now it'll be %d",cvarname,val,Clamp (Val,0,255));
+		Return Clamp (Val,0,255);
+	}
 }
 
 //NOTE: We'll need this for shit like making marines immune to friendly damage, maybe even stuff like functioning like an action restrictor and clipping through allies.

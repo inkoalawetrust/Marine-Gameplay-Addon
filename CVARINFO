@@ -1,7 +1,10 @@
-/*TODO: Apparently Ricardo/Jay added ZScript CVar handlers when I wasn't looking, use them to also clamp CVars
-when they're modified directly from the console. Mainly the actor replacement chance CVARs, which I'll route through
-the same CVar handler.*/
+//Hardcoded vanilla replacements
+//IDEA: Add Legacy of Rust or whatever support in the future?
+//NOTE: SMGR = SMGameplay_Replace(Whatever)
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Zombieman = 0;
 
+
+//Marine ability CVARs.
 Server Bool SMGameplay_NerfEnemyMarines = False;
 Server Bool SMGameplay_NerfFriendMarines = False;
 
