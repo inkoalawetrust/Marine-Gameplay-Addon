@@ -42,21 +42,19 @@ Class SMGameplay_Handler : EventHandler
 	{
 		Super.CheckReplacement (E);
 		
-		If (SMGR_Zombieman != 0 && E.Replacee == 'Zombieman' && Random (0,255) < SMGR_Zombieman)
+		If (E.Replacee == 'Zombieman' && Random (0,255) < SMGR_Zombieman)
+		{
 			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True; //It's the final countdown, dooodooodooodooo, dooo-
+		}
 		
-		E.IsFinal = True; //It's the final countdown, dooodooodooodooo, dooo-
+		//Item replacements
+		If (E.Replacee == 'Chaingun' && Random (0,255) < SMGR_Rifle_Chaingun)
+		{
+			E.Replacement = "SM_Rifle";
+			E.IsFinal = True;
+		}
 	}
-	
-	/*Override Void CheckReplacee (ReplacedEvent E)
-	{
-		Super.CheckReplacee (E);
-		if (e.replacee == null) console.printf ("oh, %s is replacing nothing in particular, huh?",e.replacement.getclassname()); 
-		If (E.Replacement == 'SMGR_Marine' && e.replacee)
-			console.printf ("the marinator is replacing SOMETHING I GUESS, is it %s?",e.replacee.getclassname());
-		
-		E.IsFinal = True; //It's the final countdown, dooodooodooodooo, dooo-
-	}*/
 	
 	Override Void WorldThingSpawned (WorldEvent E)
 	{
@@ -64,6 +62,7 @@ Class SMGameplay_Handler : EventHandler
 		
 		If (E.Thing && E.Thing Is "SMGR_Marine")
 		{
+			E.Thing.GiveInventoryType ("SMGameplay_Token");
 			string wordy = E.Thing.GetReplacee(E.Thing.GetClass()).GetClassName();
 			if (kai_debugprintmessages) console.printf ("%s was replaced by a marine, e.thing class is %s",wordy,E.Thing.GetClassname());
 		}
@@ -94,4 +93,60 @@ Class SMGameplay_Token : Inventory
 		+Inventory.Untossable;
 		+Inventory.NoScreenFlash;
 	}
+	
+	Override Void AttachToOwner (Actor Other)
+	{
+		Super.AttachToOwner (Other);
+		
+		If (!Other || !(Other Is "SM_Marine"))
+		{
+			GoAwayAndDie();
+			Return;
+		}
+		
+		//Nerf marine stats.
+		//TODO: Make this overridable by SMGameplay_SkillScaling, also use the greycheck CVAR stuff Agent_Ash added for that.
+		If (SMGameplay_NerfEnemyMarines && !Other.bFriendly || SMGameplay_NerfFriendMarines && Other.bFriendly)
+		{
+			Other.MaxTargetRange /= 2;
+			Other.DamageMultiply /= 2;
+			Other.StartHealth /=2;
+			Other.Health = Other.StartHealth;
+		}
+		
+		SM_Marine Marine = SM_Marine(Other);
+		//Marine color overrides, only override if you're set to do so, and the marine doesn't already have a color, like by being map-placed.
+		If (Marine.User_Color ~== "") 
+		{
+			If (!Marine.bFriendly)
+			{
+				If (SMGameplay_EnemyMarineColor != "")
+					SetMarineColor (Marine,SMGameplay_EnemyMarineColor);
+			}
+			Else
+			{
+				If (SMGameplay_FriendMarineColor != "")
+					SetMarineColor (Marine,SMGameplay_FriendMarineColor);
+			}
+		}
+	}
+	
+	Void SetMarineColor (SM_Marine Marine, String Colour)
+	{
+		If (!Marine) Return;
+		Marine.User_Color = Colour;
+		Marine.SM_HandleMarineColoring (Marine.User_Color);
+	}
+	
+	//Override Void ModifyDamage (Int Damage, Name DamageType, Out Int NewDamage, Bool Passive, Actor Inflictor, Actor Source, Int Flags)
+	//{
+		
+	//}
+	
+	Override Void DoEffect()
+	{
+		Super.DoEffect();
+	}
+	
+	
 }

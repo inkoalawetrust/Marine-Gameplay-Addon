@@ -3,29 +3,50 @@ AddOptionMenu "OptionsMenu"
 	Submenu "Marine Gameplay Addon Settings", "Marine Gameplay Options"
 }
 
+//The mods' settings.
 OptionMenu "Marine Gameplay Options"
 {
 	Submenu "Difficulty settings", "Difficulty settings"
     Submenu "Monster replacements", "Monster replacements"
 	Submenu "Item replacements", "Item replacements"
+	
+	StaticText ""
+	StaticText "Marine color options", Blue
+	StaticText "Settings for overriding the colors of marines, available marine colors:", Yellow
+	StaticText "Red, Gray, White, Black, Blue, Yellow, Orange, Pink, DarkGreen, DarkRed", Yellow
+	StaticText "Random: Special color, picks any of the above or no color at all.", Yellow
+	StaticText "Empty string: If the color setting is left empty, it just means \"no custom color\"", Yellow
+	StaticText "These settings ONLY work for marines that are placed in by this addon. Not map-spawned marines!", Red
+	StaticText ""
+	TextField "Enemy marine color", "SMGameplay_EnemyMarineColor"
+	StaticText "The color of all enemy marines"
+	TextField "Friendly marine color", "SMGameplay_FriendMarineColor"
+	StaticText "The color of all friendly marines"
 }
 
 //Sub menus
+//Difficulty related settings
 OptionMenu "Difficulty settings"
 {
 	Title "Marine difficulty settings"
 	StaticText "Controls how strong the marines are in terms of stats and abilities.", Gray
-	//Option 
+	StaticText ""
+	Option "Nerf enemy marines", "SMGameplay_NerfEnemyMarines", "OnOff"
+	StaticText "Broadly makes hostile marines weak, halving their health, damage output, and sight range.", Green
+	Option "Nerf friendly marines", "SMGameplay_NerfFriendMarines", "OnOff"
+	StaticText "Broadly makes friendly marines weak, halving their health, damage output, and sight range.", Green
 	
 	Submenu "Restricted actions", "Restricted actions"
 }
 
+//Things the marines shouldn't be able to do.
 OptionMenu "Restricted actions"
 {
 	Title "Restricted actions"
 	StaticText "Actions that the marines are just forbidden from performing.", Gray
 }
 
+//Things the marines replace
 OptionMenu "Monster replacements"
 {
     Title "Monster replacements"
@@ -34,9 +55,12 @@ OptionMenu "Monster replacements"
     Slider "Zombieman", "SMGR_Zombieman", 0, 255, 5
 }
 
+//Items replaced by marine-related items.
 OptionMenu "Item replacements"
 {
     Title "Item replacements"
 	StaticText "Sets the specific chances of any particular item to be replaced by a custom item.", Gray
 	StaticText "0 is never, 255 is always", Gray
-}
+	StaticText ""
+	Slider "Marine rifle replaces chaingun", "SMGR_Rifle_Chaingun", 0, 255, 5
+} 

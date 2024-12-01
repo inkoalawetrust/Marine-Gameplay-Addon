@@ -3,6 +3,8 @@
 //NOTE: SMGR = SMGameplay_Replace(Whatever)
 Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Zombieman = 0;
 
+//Item replacements
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Rifle_Chaingun = 0;
 
 //Marine ability CVARs.
 Server Bool SMGameplay_NerfEnemyMarines = False;
@@ -10,3 +12,9 @@ Server Bool SMGameplay_NerfFriendMarines = False;
 
 Server Bool SMGameplay_SkillScaling = True; //Skill based matchmaking.
 Server Bool SMGameplay_PowerScaling = True; //Try to conform the marine to the threat level of what it replaced.
+
+Server Float SMGameplay_FriendDamageMul = 0.0; //Alter how much marine friends can be hurt by other allies.
+
+//Colors
+Server String SMGameplay_EnemyMarineColor = "Red";
+Server String SMGameplay_FriendMarineColor = ""; //Friend marines are just, green.
