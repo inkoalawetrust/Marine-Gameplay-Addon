@@ -1,0 +1,37 @@
+Version "4.12"
+
+//TODO:
+//Add options for replacing specific monsters, with marines. With chances from 0-255 instead of bools, for finer control, maybe some presets too.
+//Add options for nerfing enemy and friendly marines separetely.
+/*Add an option for locking marine behaviors, behind the difficulty (i.e ITYTD marines are stoopid), and a setting to override map-placed marines too.
+Or to only affect pre-placed marines that have no custom user variable values at all.*/
+/*Make a beacon teleporter item (With customizable marine amounts and stuff), that when thrown, spawns some amount of friendly marines. Also add settings for which
+items it replaces and the chances of it doing so. Also need to handle stuff like crammed spaces with it and shit, maybe like making it so you can pick it up again
+if it couldn't teleport all the marines it has "stored".*/
+//And option to make marines phase through allies like players, oh, also to make them immune to all friendly damage. And also making them
+
+
+//IDEA:
+//Add a customizable "SpawnMarine" console command/netevent, like for specified marine color, armor, user variables, that stuff.
+//For item and monster replacements, try adding some kind of custom field for each for insert custom classes to replace and the chance of doing so?
+//God fucking help me. A way to have MARINES PERSIST ACROSS MAPS?
+
+//#Include "ZScript/Token.zsc" //TODO: Move the SMGameplay_Token I'll likely need there.
+
+Class SMGameplay_Handler : EventHandler
+
+//NOTE: We'll need this for shit like making marines immune to friendly damage, maybe even stuff like functioning like an action restrictor and clipping through allies.
+Class SMGameplay_Token : Inventory
+{
+	Default
+	{
+		Inventory.MaxAmount 1;
+		Inventory.Amount 1;
+		+Inventory.Undroppable;
+		+Inventory.Unclearable;
+		+Inventory.HubPower;
+		+Inventory.PersistentPower;
+		+Inventory.Untossable;
+		+Inventory.NoScreenFlash;
+	}
+}
