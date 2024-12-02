@@ -6,7 +6,6 @@ like Mancubi? Or only replace the blursphere with beacons by default or somethin
 
 //TODO:
 //Add options for replacing specific monsters, with marines. With chances from 0-255 instead of bools, for finer control, maybe some presets too.
-//Add options for nerfing enemy and friendly marines separetely.
 /*Add an option for locking marine behaviors, behind the difficulty (i.e ITYTD marines are stoopid), and a setting to override map-placed marines too.
 Or to only affect pre-placed marines that have no custom user variable values at all.*/
 /*Make a beacon teleporter item (With customizable marine amounts and stuff), that when thrown, spawns some amount of friendly marines. Also add settings for which
@@ -14,11 +13,10 @@ items it replaces and the chances of it doing so. Also need to handle stuff like
 if it couldn't teleport all the marines it has "stored".*/
 //And option to make marines phase through allies like players, oh, also to make them immune to all friendly damage. And also making them go through monster block lines.
 //Add a setting to make the marine that replaces a specific class try to generally conform to its' threat level. i.e zombieman-replacing marines are weak as shit
-//Add a setting to have a chance of replacing the chaingun with the marines' rifle.
 
 //IDEA:
 //Add a customizable "SpawnMarine" console command/netevent, like for specified marine color, armor, user variables, that stuff.
-//For item and monster replacements, try adding some kind of custom field for each for insert custom classes to replace and the chance of doing so?
+//For item and monster replacements, try adding some kind of custom field for each for inserting custom classes to replace and the chance of doing so?
 //God fucking help me. A way to have MARINES PERSIST ACROSS MAPS?
 
 //#Include "ZScript/Token.zsc" //TODO: Move the SMGameplay_Token I'll likely need there.
@@ -65,6 +63,7 @@ Class SMGameplay_Handler : EventHandler
 		{
 			Inventory Token = Inventory(Actor.Spawn("SMGameplay_Token"));
 			If (Token && !(E.Thing Is "SMGR_Marine")) SMGameplay_Token(Token).IsForMapMarine = True; //Non-replacing marines are specially marked.
+			
 			//NOW, give the item to the marine, now that the variable is set properly.
 			Token.CallTryPickup(E.Thing);
 			//string wordy = E.Thing.GetReplacee(E.Thing.GetClass()).GetClassName();
@@ -97,6 +96,9 @@ Class SMGameplay_Token : Inventory
 		+Inventory.Untossable;
 		+Inventory.NoScreenFlash;
 	}
+	
+	//Actions ALL marines are restricted from performing. Functions as a map-wide action restrictor for marines not already under some restrictors' influence.
+	Bool NoCover, NoClimb, NoJump, NoCrouch, NoSwim, NoDodge, NoHeal, NoWarn, NoReloadRun;
 	
 	Bool IsForMapMarine; //If on, the token is being used by a pre-placed marine, mainly ones added by the map itself. So they won't be affect by certain settings.
 	
@@ -144,6 +146,38 @@ Class SMGameplay_Token : Inventory
 		Marine.User_Color = Colour;
 		Marine.SM_HandleMarineColoring (Marine.User_Color);
 	}
+	//Bool NoCover, NoClimb, NoJump, NoCrouch, NoSwim, NoDodge, NoHeal, NoWarn, NoReloadRun;
+	//Handle restricting specific marine functions as specified in the settings.
+	Bool RestrictMarine (SM_Marine Marine)
+	{
+		If (!Marine)
+			Return False;
+		//Literally nothing is restricted.
+		If (!SMGRestrict_Cover && !SMGRestrict_Climb && !SMGRestrict_Jump && !SMGRestrict_Crouch /*&& !SMGRestrict_Swim*/ && !SMGRestrict_Dodge && !SMGRestrict_Heal &&
+		!SMGRestrict_Warn && !SMGRestrict_ReloadRun)
+			Return False;
+		
+		SM_RestrictionToken Restrictor = SM_RestrictionToken(Marine.FindInventory ("SM_RestrictionToken")); //Already have a token.
+		If (!Restrictor)
+			Restrictor = SM_RestrictionToken(Spawn("SM_RestrictionToken"));
+		
+		If (Restrictor)
+		{
+			Restrictor.NoCover		= SMGRestrict_Cover;
+			Restrictor.NoClimb		= SMGRestrict_Climb;
+			Restrictor.NoJump		= SMGRestrict_Jump;
+			Restrictor.NoCrouch		= SMGRestrict_Crouch;
+			//Restrictor.NoSwim		= SMGRestrict_Swim;
+			Restrictor.NoDodge		= SMGRestrict_Dodge;
+			Restrictor.NoHeal		= SMGRestrict_Heal;
+			Restrictor.NoWarn		= SMGRestrict_Warn;
+			Restrictor.NoReloadRun	= SMGRestrict_ReloadRun; //IDEA: Replace this with a slider that modifies the retreat factor user var instead?
+			console.printf ("gameplay addon is restricting marine.");
+			Restrictor.MaxTargetRange = -1; //No range needed, this is map wide.
+		}
+		Restrictor.CallTryPickup (Marine); //Pick up the token
+		Return True;
+	}
 	
 	Override Void ModifyDamage (Int Damage, Name DamageType, Out Int NewDamage, Bool Passive, Actor Inflictor, Actor Source, Int Flags)
 	{
@@ -157,6 +191,8 @@ Class SMGameplay_Token : Inventory
 	
 	Override Void DoEffect()
 	{
+		//NOTE: Ran before ticking in vain hope of maybe not triggering a timing bug where the restrict token is given AFTER the marine has done the restricted action.
+		RestrictMarine (SM_Marine(Owner)); //Run token restrictions.
 		Super.DoEffect();
 	}
 	

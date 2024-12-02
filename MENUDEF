@@ -38,7 +38,7 @@ OptionMenu "Difficulty settings"
 	StaticText ""
 	Slider "Ally damage multiplier", "SMGameplay_FriendDamageMul", 0.0, 10.0, 0.1, 1
 	StaticText "How much damage all friendly marines receive from players and other allies. Default is 0, i.e no friendly fire", Green
-	
+	StaticText ""
 	Submenu "Restricted actions", "Restricted actions"
 }
 
@@ -46,7 +46,31 @@ OptionMenu "Difficulty settings"
 OptionMenu "Restricted actions"
 {
 	Title "Restricted actions"
-	StaticText "Actions that the marines are just forbidden from performing.", Gray
+	StaticText "Actions that ALL the marines are just forbidden from ever performing.", Gray
+	StaticText ""
+	StaticText "IF ANY OF THESE RESTRICTIONS ARE ENABLED, THEY MIGHT INTERFERE WITH PRE-PLACED ACTION RESTRICTORS.", Red
+	StaticText "SO MAKE SURE THEY'RE OFF ON MAPS THAT USE MARINE ACTION RESTRICTORS", Red
+	StaticText "FOR INFO ON WHAT ACTION RESTRICTORS ARE, READ THE SMART MARINE DOCUMENTATION.", Red
+	StaticText ""
+	
+	Option "Don't take cover", "SMGRestrict_Cover", "OnOff"
+	StaticText "Marines will never hide behind cover in front of, or around them.", Green
+	Option "Don't climb", "SMGRestrict_Climb", "OnOff"
+	StaticText "Marines will never climb over obstacles.", Green
+	Option "Don't jump", "SMGRestrict_Jump", "OnOff"
+	StaticText "Marines will never jump across gaps.", Green
+	Option "Don't crouch", "SMGRestrict_Crouch", "OnOff"
+	StaticText "Marines will never crouch under level geometry and actors obstructing them.", Green
+	//Option "Don't swim", "SMGRestrict_Swim", "OnOff"
+	//StaticText "Hello, you are looking at an addon setting for a feature the marines don't yet have.", Green
+	Option "Don't dodge", "SMGRestrict_Dodge", "OnOff"
+	StaticText "Marines will never dodge incoming projectiles.", Green
+	Option "Don't deal allies", "SMGRestrict_Heal", "OnOff"
+	StaticText "Marines will never give stimpacks to nearby allies.", Green
+	Option "Don't warn allies", "SMGRestrict_Warn", "OnOff"
+	StaticText "Marines will never warn other marines (And KAI humanoids) friendly to them.", Green
+	Option "Don't retreat to reload", "SMGRestrict_ReloadRun", "OnOff"
+	StaticText "Marines will never retreat to reload their rifles.", Green
 }
 
 //Things the marines replace
