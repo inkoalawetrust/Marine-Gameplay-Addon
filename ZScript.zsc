@@ -59,12 +59,16 @@ Class SMGameplay_Handler : EventHandler
 	Override Void WorldThingSpawned (WorldEvent E)
 	{
 		Super.WorldThingSpawned (E);
+		If (!E.Thing) Return;
 		
-		If (E.Thing && E.Thing Is "SMGR_Marine")
+		If (E.Thing Is "SM_Marine")
 		{
-			E.Thing.GiveInventoryType ("SMGameplay_Token");
-			string wordy = E.Thing.GetReplacee(E.Thing.GetClass()).GetClassName();
-			if (kai_debugprintmessages) console.printf ("%s was replaced by a marine, e.thing class is %s",wordy,E.Thing.GetClassname());
+			Inventory Token = Inventory(Actor.Spawn("SMGameplay_Token"));
+			If (Token && !(E.Thing Is "SMGR_Marine")) SMGameplay_Token(Token).IsForMapMarine = True; //Non-replacing marines are specially marked.
+			//NOW, give the item to the marine, now that the variable is set properly.
+			Token.CallTryPickup(E.Thing);
+			//string wordy = E.Thing.GetReplacee(E.Thing.GetClass()).GetClassName();
+			//if (kai_debugprintmessages) console.printf ("%s was replaced by a marine, e.thing class is %s",wordy,E.Thing.GetClassname());
 		}
 	}
 }
@@ -94,6 +98,8 @@ Class SMGameplay_Token : Inventory
 		+Inventory.NoScreenFlash;
 	}
 	
+	Bool IsForMapMarine; //If on, the token is being used by a pre-placed marine, mainly ones added by the map itself. So they won't be affect by certain settings.
+	
 	Override Void AttachToOwner (Actor Other)
 	{
 		Super.AttachToOwner (Other);
@@ -104,9 +110,10 @@ Class SMGameplay_Token : Inventory
 			Return;
 		}
 		
+		console.printf ("isformapmarine for %p is set to %d",other,isformapmarine);
 		//Nerf marine stats.
 		//TODO: Make this overridable by SMGameplay_SkillScaling, also use the greycheck CVAR stuff Agent_Ash added for that.
-		If (SMGameplay_NerfEnemyMarines && !Other.bFriendly || SMGameplay_NerfFriendMarines && Other.bFriendly)
+		If (!IsForMapMarine && SMGameplay_NerfEnemyMarines && !Other.bFriendly || SMGameplay_NerfFriendMarines && Other.bFriendly)
 		{
 			Other.MaxTargetRange /= 2;
 			Other.DamageMultiply /= 2;
@@ -116,7 +123,7 @@ Class SMGameplay_Token : Inventory
 		
 		SM_Marine Marine = SM_Marine(Other);
 		//Marine color overrides, only override if you're set to do so, and the marine doesn't already have a color, like by being map-placed.
-		If (Marine.User_Color ~== "") 
+		If (!IsForMapMarine && Marine.User_Color ~== "") 
 		{
 			If (!Marine.bFriendly)
 			{
@@ -138,10 +145,15 @@ Class SMGameplay_Token : Inventory
 		Marine.SM_HandleMarineColoring (Marine.User_Color);
 	}
 	
-	//Override Void ModifyDamage (Int Damage, Name DamageType, Out Int NewDamage, Bool Passive, Actor Inflictor, Actor Source, Int Flags)
-	//{
+	Override Void ModifyDamage (Int Damage, Name DamageType, Out Int NewDamage, Bool Passive, Actor Inflictor, Actor Source, Int Flags)
+	{
+		If (Owner && !Owner.bFriendly)
+			Return;
 		
-	//}
+		//Scale the friendly fire damage friendly marines receive from ally.
+		If (Passive && Damage > 0 && Source && (Source.Player || Source.bFriendly))
+			NewDamage *= SMGameplay_FriendDamageMul;
+	}
 	
 	Override Void DoEffect()
 	{

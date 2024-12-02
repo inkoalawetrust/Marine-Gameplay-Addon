@@ -35,6 +35,9 @@ OptionMenu "Difficulty settings"
 	StaticText "Broadly makes hostile marines weak, halving their health, damage output, and sight range.", Green
 	Option "Nerf friendly marines", "SMGameplay_NerfFriendMarines", "OnOff"
 	StaticText "Broadly makes friendly marines weak, halving their health, damage output, and sight range.", Green
+	StaticText ""
+	Slider "Ally damage multiplier", "SMGameplay_FriendDamageMul", 0.0, 10.0, 0.1, 1
+	StaticText "How much damage all friendly marines receive from players and other allies. Default is 0, i.e no friendly fire", Green
 	
 	Submenu "Restricted actions", "Restricted actions"
 }
