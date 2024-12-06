@@ -27,5 +27,5 @@ Server Bool SMGRestrict_Warn = False;
 Server Bool SMGRestrict_ReloadRun = False;
 
 //Colors
-Server String SMGameplay_EnemyMarineColor = "Red";
-Server String SMGameplay_FriendMarineColor = ""; //Friend marines are just, green.
+Server HandlerClass (SMGameplay_ChangeMarineColor) String SMGameplay_EnemyMarineColor = "Red";
+Server HandlerClass (SMGameplay_ChangeMarineColor) String SMGameplay_FriendMarineColor = ""; //Friend marines are just, green.

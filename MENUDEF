@@ -12,7 +12,7 @@ OptionMenu "Marine Gameplay Options"
 	
 	StaticText ""
 	StaticText "Marine color options", Blue
-	StaticText "Settings for overriding the colors of marines, available marine colors:", Yellow
+	StaticText "Settings for overriding the colors of marines in real time, available marine colors:", Yellow
 	StaticText "Red, Gray, White, Black, Blue, Yellow, Orange, Pink, DarkGreen, DarkRed", Yellow
 	StaticText "Random: Special color, picks any of the above or no color at all.", Yellow
 	StaticText "Empty string: If the color setting is left empty, it just means \"no custom color\"", Yellow

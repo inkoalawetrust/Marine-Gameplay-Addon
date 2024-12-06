@@ -70,6 +70,42 @@ Class SMGameplay_Handler : EventHandler
 			//if (kai_debugprintmessages) console.printf ("%s was replaced by a marine, e.thing class is %s",wordy,E.Thing.GetClassname());
 		}
 	}
+	
+	//Custom command handling
+	Override Void NetworkProcess (ConsoleEvent E)
+	{
+		If (E.Player < 0 || !PlayerInGame[E.Player] || !Players[E.Player].Mo)
+			Return;
+		
+		Let PlrMo = Players[E.Player].Mo;
+		
+		Array <String> Command;
+		Command.Push (E.Name);
+		
+		//HACK: We can't fucking update the marine colors through SMGameplay_ChangeMarineColor, too straightforward, NOOOO we have to do all this instead!
+		If (Command[0] ~== "SMG_UpdateMarineColor")
+		{
+			//Find all addon-spawned marines in the map, and update their colors.
+			ThinkerIterator MarineSearch = ThinkerIterator.Create("SMGR_Marine");
+			SM_Marine Marine;
+			While (Marine = SMGR_Marine(MarineSearch.Next()))
+			{
+				//If (Marine.User_Color ~== "") 
+				{
+					If (!Marine.bFriendly)
+					{
+						If (SMGameplay_EnemyMarineColor != "")
+							SMGameplay_Token.SetMarineColor (Marine,SMGameplay_EnemyMarineColor);
+					}
+					Else
+					{
+						If (SMGameplay_FriendMarineColor != "")
+							SMGameplay_Token.SetMarineColor (Marine,SMGameplay_FriendMarineColor);
+					}
+				}
+			}
+		}
+	}
 }
 
 //Clamp actor replacement values between 0 and 255.
@@ -79,6 +115,17 @@ Class SMGameplay_ReplaceClamp : CustomIntCVAR
 	{
 		if (kai_debugprintmessages) console.printf ("%s value was %d, now it'll be %d",cvarname,val,Clamp (Val,0,255));
 		Return Clamp (Val,0,255);
+	}
+}
+
+//Update all marines to match the color the settings have been set to. Update both the hostile and friendly marine color overrides to not make a second CVAR class.
+Class SMGameplay_ChangeMarineColor : CustomStringCVAR
+{
+	Override String ModifyValue (Name CVarName, String Val)
+	{
+		//HACK: Can't just call the code this stupid console command runs directly here, because of object scopes.
+		SMGameplay_Handler(EventHandler.Find("SMGameplay_Handler")).SendNetworkEvent ("SMG_UpdateMarineColor");
+		Return Val;
 	}
 }
 
@@ -140,12 +187,13 @@ Class SMGameplay_Token : Inventory
 		}
 	}
 	
-	Void SetMarineColor (SM_Marine Marine, String Colour)
+	Static Void SetMarineColor (SM_Marine Marine, String Colour)
 	{
 		If (!Marine) Return;
 		Marine.User_Color = Colour;
 		Marine.SM_HandleMarineColoring (Marine.User_Color);
 	}
+	
 	//Bool NoCover, NoClimb, NoJump, NoCrouch, NoSwim, NoDodge, NoHeal, NoWarn, NoReloadRun;
 	//Handle restricting specific marine functions as specified in the settings.
 	Bool RestrictMarine (SM_Marine Marine)
