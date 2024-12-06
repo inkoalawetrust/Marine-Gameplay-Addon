@@ -21,21 +21,21 @@ if it couldn't teleport all the marines it has "stored".*/
 
 //#Include "ZScript/Token.zsc" //TODO: Move the SMGameplay_Token I'll likely need there.
 
-/*HACK: For fucks sake, there's no way to pass what actor replaced who in CheckReplacement(), so for SMGameplay_Powerscaling to work I need to do shit like make
-Arachnotrons be replaced by a specific SM_Marine child class, so that I can check in CheckReplacee() if THAT stupid hack bastard child is replacing something, to be
-able to properly mark the marine as replacing the Arachnotron. Besides being an awful hack, it also has the fun side effect of making it fucking impossible if I add
-the ability to replace other unsupported NPCs with marines, to have the marines conform to the threat level of who they're replacing.
-
-So if you got Doomless loaded or something, and want to replace a guy from it with a marine, the marine won't be able to have their abilities and stats adjusted
-to match him.
-
-UPDATE: Okay, we'll see. Frankly, I might just fucking not add SMGameplay_PowerScaling, at least I add a passable text field for the replacement system as a PR.
-*/
 Class SMGR_Marine : SM_Marine{}
 
 Class SMGameplay_Handler : EventHandler
 {
 	//Handle replacing NPCs and shit with marines.
+	/*HACK: For fucks sake, there's no way to pass what actor replaced who in CheckReplacement(), so for SMGameplay_Powerscaling to work I need to do shit like make
+	Arachnotrons be replaced by a specific SM_Marine child class, so that I can check in CheckReplacee() if THAT stupid hack bastard child is replacing something, to be
+	able to properly mark the marine as replacing the Arachnotron. Besides being an awful hack, it also has the fun side effect of making it fucking impossible if I add
+	the ability to replace other unsupported NPCs with marines, to have the marines conform to the threat level of who they're replacing.
+
+	So if you got Doomless loaded or something, and want to replace a guy from it with a marine, the marine won't be able to have their abilities and stats adjusted
+	to match him.
+
+	UPDATE: Okay, we'll see. Frankly, I might just fucking not add SMGameplay_PowerScaling, at least until I add a passable text field for the replacement system as a PR.
+	*/
 	Override Void CheckReplacement (ReplaceEvent E)
 	{
 		Super.CheckReplacement (E);
@@ -59,6 +59,7 @@ Class SMGameplay_Handler : EventHandler
 		Super.WorldThingSpawned (E);
 		If (!E.Thing) Return;
 		
+		//Give special token to all marines.
 		If (E.Thing Is "SM_Marine")
 		{
 			Inventory Token = Inventory(Actor.Spawn("SMGameplay_Token"));
@@ -66,8 +67,6 @@ Class SMGameplay_Handler : EventHandler
 			
 			//NOW, give the item to the marine, now that the variable is set properly.
 			Token.CallTryPickup(E.Thing);
-			//string wordy = E.Thing.GetReplacee(E.Thing.GetClass()).GetClassName();
-			//if (kai_debugprintmessages) console.printf ("%s was replaced by a marine, e.thing class is %s",wordy,E.Thing.GetClassname());
 		}
 	}
 	
@@ -105,6 +104,30 @@ Class SMGameplay_Handler : EventHandler
 				}
 			}
 		}
+		//Update if player-aligned addon marines have User_AllyClip on or not.
+		Else If (Command[0] ~== "SMG_UpdateMarineClipping")
+		{
+			ThinkerIterator MarineSearch = ThinkerIterator.Create("SMGR_Marine");
+			SM_Marine Marine;
+			While (Marine = SMGR_Marine(MarineSearch.Next()))
+			{
+				If (Marine.bFriendly)
+					Marine.User_AllyClip = SMGameplay_FriendClip;
+			}
+		}
+		//Update addon marines to have bottomless magazines or not.
+		Else If (Command[0] ~== "SMG_UpdateMarineInfiniteAmmo")
+		{
+			ThinkerIterator MarineSearch = ThinkerIterator.Create("SMGR_Marine");
+			SM_Marine Marine;
+			While (Marine = SMGR_Marine(MarineSearch.Next()))
+			{
+				If (Marine.bFriendly)
+					Marine.User_NoReload = SMGameplay_Ally_InfiniteAmmo;
+				Else
+					Marine.User_NoReload = SMGameplay_Foe_InfiniteAmmo;
+			}
+		}
 	}
 }
 
@@ -125,6 +148,20 @@ Class SMGameplay_ChangeMarineColor : CustomStringCVAR
 	{
 		//HACK: Can't just call the code this stupid console command runs directly here, because of object scopes.
 		SMGameplay_Handler(EventHandler.Find("SMGameplay_Handler")).SendNetworkEvent ("SMG_UpdateMarineColor");
+		Return Val;
+	}
+}
+
+//Update a boolean user variable on the marines.
+Class SMGameplay_UpdateMarineBoolVar : CustomBoolCVAR
+{
+	Override Bool ModifyValue (Name CVarName, Bool Val)
+	{
+		Let Handler = SMGameplay_Handler(EventHandler.Find("SMGameplay_Handler"));
+		If (CVarName == 'SMGameplay_FriendClip')
+			Handler.SendNetworkEvent ("SMG_UpdateMarineClipping");
+		Else If (CVarName == 'SMGameplay_Ally_InfiniteAmmo' || CVarName == 'SMGameplay_Foe_InfiniteAmmo')
+			Handler.SendNetworkEvent ("SMG_UpdateMarineInfiniteAmmo");
 		Return Val;
 	}
 }
@@ -184,6 +221,18 @@ Class SMGameplay_Token : Inventory
 				If (SMGameplay_FriendMarineColor != "")
 					SetMarineColor (Marine,SMGameplay_FriendMarineColor);
 			}
+		}
+		
+		//Set marine bool user vars.
+		If (!IsForMapMarine)
+		{
+			If (Marine.bFriendly)
+			{
+				Marine.User_AllyClip = SMGameplay_FriendClip;
+				Marine.User_NoReload = SMGameplay_Ally_InfiniteAmmo;
+			}
+			Else
+				Marine.User_NoReload = SMGameplay_Foe_InfiniteAmmo;
 		}
 	}
 	

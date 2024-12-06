@@ -15,6 +15,10 @@ Server Bool SMGameplay_PowerScaling = True; //Try to conform the marine to the t
 
 Server Float SMGameplay_FriendDamageMul = 0.0; //Alter how much marine friends can be hurt by other allies.
 
+Server HandlerClass (SMGameplay_UpdateMarineBoolVar) Bool SMGameplay_FriendClip = False; //Friendly addon-spawned marines clip through their allies.
+Server HandlerClass (SMGameplay_UpdateMarineBoolVar) Bool SMGameplay_Ally_InfiniteAmmo = False; //Friendly addon-spawned marines have bottomless magazines.
+Server HandlerClass (SMGameplay_UpdateMarineBoolVar) Bool SMGameplay_Foe_InfiniteAmmo = False; //Enemy addon-spawned marines have bottomless magazines.
+
 //Marine action restrictions, take precedence over SMGameplay_PowerScaling. i.e if taking cover isn't allowed, It's NEVER used
 Server Bool SMGRestrict_Cover = False;
 Server Bool SMGRestrict_Climb = False;
