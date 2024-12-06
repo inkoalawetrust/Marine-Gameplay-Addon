@@ -26,18 +26,54 @@ OptionMenu "Marine Gameplay Options"
 
 //Sub menus
 //Difficulty related settings
+OptionValue SkillFilters
+{
+	0, "Use map skill"
+	1, "Very Easy"
+	2, "Easy"
+	4, "Normal"
+	8, "Hard"
+	16,"Very Hard"
+}
 OptionMenu "Difficulty settings"
 {
 	Title "Marine difficulty settings"
 	StaticText "Controls how strong the marines are in terms of stats and abilities.", Gray
 	StaticText ""
-	Option "Nerf enemy marines", "SMGameplay_NerfEnemyMarines", "OnOff"
-	StaticText "Broadly makes hostile marines weak, halving their health, damage output, and sight range.", Green
-	Option "Nerf friendly marines", "SMGameplay_NerfFriendMarines", "OnOff"
-	StaticText "Broadly makes friendly marines weak, halving their health, damage output, and sight range.", Green
+	Option "Nerf enemy marines", "SMGameplay_NerfEnemyMarines", "OnOff", "SMGameplay_SkillScaling", "0", "1"
+	StaticText "Broadly makes hostile marines weak on spawn, halving their health, damage output, and sight range.", Green
+	Option "Nerf friendly marines", "SMGameplay_NerfFriendMarines", "OnOff", "SMGameplay_SkillScaling", "0", "1"
+	StaticText "Broadly makes friendly marines weak on spawn, halving their health, damage output, and sight range.", Green
+	
 	StaticText ""
+	
+	Option "Scale marines with difficulty", "SMGameplay_SkillScaling", "OnOff"
+	StaticText "Locks the abilities of addon-spawned marines behind the maps' skill filter.", Green
+	StaticText "This takes precedence over the nerf debuffs.", Green
+	Option "Exact marine difficulty", "SMGameplay_SkillFilter", "SkillFilters", "SMGameplay_SkillScaling"
+	StaticText "Instead of using the current difficulty's skill level, use a custom one. i.e to only have weak-ish marines", Green
+	
+	StaticText ""
+	StaticText "The marines' abilities for each skill filter are:", Green
+	StaticText "Very Easy: No armor, half health, half damage, half sight range. Can't parkour, take cover, use emplacements", Cream
+	StaticText "dodge, heal allies, use grenades, or alert other KAI humanoids of enemies.", Cream
+	StaticText "Easy: Half green armor, 75HP, 25% less damage and sight range. Can't parkour, take cover, use emplacements", Cyan
+	StaticText "can poorly dodge projectiles, and will rarely throw grenades.", Cyan
+	StaticText "Normal: 75 green armor, normal health and sight range, 25% less damage. Can't parkour, but can take cover", Brick
+	StaticText "can decently dodge projectiles, sometimes uses grenades, takes twice as long to use turrets or heal allies", Brick
+	StaticText "can alert allies of enemies at half range", Brick
+	StaticText "Hard: Normal marines, no stat debuffs, can use all abilities and attacks normally.", Green
+	StaticText "Very Hard: 210 health, 200 blue armor, maximum marine height and width, more likely to throw grenades,", Fire
+	StaticText "heals allies 4 times as fast, moves slightly faster, can reload and climb twice as fast.", Fire
+	StaticText "Has light amp goggles (Can see players with blurspheres and past smoke screens)", Fire
+	StaticText "Has a berserk pack (Does multiple times more melee damage and is much more likely to do melee attacks)", Fire
+	
+	StaticText ""
+	StaticText ""
+	
 	Slider "Ally damage multiplier", "SMGameplay_FriendDamageMul", 0.0, 10.0, 0.1, 1
 	StaticText "How much damage all friendly marines receive from players and other allies. Default is 0, i.e no friendly fire", Green
+	
 	StaticText ""
 	Option "Friendly marines have infinite ammo", "SMGameplay_Ally_InfiniteAmmo", "OnOff"
 	StaticText "Makes all addon-based friendly marines have infinite ammonution.", Green
@@ -78,6 +114,8 @@ OptionMenu "Restricted actions"
 	StaticText "Marines will never warn other marines (And KAI humanoids) friendly to them.", Green
 	Option "Don't retreat to reload", "SMGRestrict_ReloadRun", "OnOff"
 	StaticText "Marines will never retreat to reload their rifles.", Green
+	Option "Don't use emplacements", "SMGRestrict_Emplacements", "OnOff"
+	StaticText "Marines will never use KAI emplacements.", Green
 }
 
 //Things the marines replace

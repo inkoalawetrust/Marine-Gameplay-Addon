@@ -11,7 +11,6 @@ Or to only affect pre-placed marines that have no custom user variable values at
 /*Make a beacon teleporter item (With customizable marine amounts and stuff), that when thrown, spawns some amount of friendly marines. Also add settings for which
 items it replaces and the chances of it doing so. Also need to handle stuff like crammed spaces with it and shit, maybe like making it so you can pick it up again
 if it couldn't teleport all the marines it has "stored".*/
-//And option to make marines phase through allies like players, oh, also to make them immune to all friendly damage. And also making them go through monster block lines.
 //Add a setting to make the marine that replaces a specific class try to generally conform to its' threat level. i.e zombieman-replacing marines are weak as shit
 
 //IDEA:
@@ -198,16 +197,87 @@ Class SMGameplay_Token : Inventory
 		
 		console.printf ("isformapmarine for %p is set to %d",other,isformapmarine);
 		//Nerf marine stats.
-		//TODO: Make this overridable by SMGameplay_SkillScaling, also use the greycheck CVAR stuff Agent_Ash added for that.
-		If (!IsForMapMarine && SMGameplay_NerfEnemyMarines && !Other.bFriendly || SMGameplay_NerfFriendMarines && Other.bFriendly)
+		If (!IsForMapMarine && !SMGameplay_SkillScaling)
 		{
-			Other.MaxTargetRange /= 2;
-			Other.DamageMultiply /= 2;
-			Other.StartHealth /=2;
-			Other.Health = Other.StartHealth;
+			If (SMGameplay_NerfEnemyMarines && !Other.bFriendly || SMGameplay_NerfFriendMarines && Other.bFriendly)
+			{
+				Other.MaxTargetRange /= 2;
+				Other.DamageMultiply /= 2;
+				Other.StartHealth /= 2;
+				Other.Health = Other.StartHealth;
+			}
 		}
 		
 		SM_Marine Marine = SM_Marine(Other);
+		//TODO: Add manual override for the skill setting.
+		//Alter marine abilities (Using their user vars) based on the maps' skill level (Well, the skill FILTER more specifically, for universal-ish skill checks).
+		If (!IsForMapMarine && SMGameplay_SkillScaling)
+		{
+			Int SkillFilter = (SMGameplay_SkillFilter == -1) ? G_SkillPropertyInt (SKILLP_SPAWNFILTER) : SMGameplay_SkillFilter;
+			Switch (SkillFilter)
+			{
+				Case 1: //Skill issue.
+					Marine.RemoveInventory (FindInventory("BasicArmor")); //Naked marines.
+					If (Marine.StartHealth >= 50) Marine.StartHealth = Marine.Health /= 2; //Fragile marines.
+					Marine.DamageMultiply = 0.5; //Crap damage
+					Marine.MaxTargetRange *= 0.5; //Myopic marines.
+					Marine.ThreatLevel = KAI_Actor.THREAT_LOW;
+					
+					Marine.User_NoParkour = Marine.User_NoCover = True; //Fat and stupid marines.
+					Marine.User_DodgeRange = -1; //Slowpoke marines.
+					Marine.User_TurretDelay = -1; //Peashooter only marines.
+					Marine.User_HealCooldown = Marine.User_GrenadeThreshold = Marine.User_AlertRange = -1; //Inept marines.
+					Break;
+				Case 2: //TOO EASY, PIECE OF CAKE!
+					Marine.TakeInventory ("BasicArmor",50); //Half armor
+					If (Marine.StartHealth >= 75) Marine.StartHealth = Marine.Health *= 0.75; //Weaker marines.
+					Marine.DamageMultiply = 0.75; //Less damage.
+					Marine.MaxTargetRange *= 0.75; //Needs prescription glasses.
+					Marine.ThreatLevel = KAI_Actor.THREAT_MILD;
+					
+					Marine.User_NoParkour = Marine.User_NoCover = True; //Fat and stupid marines.
+					Marine.User_DodgeRange = 128; //Bad dodging.
+					Marine.User_TurretDelay = -1; //Peashooter only marines.
+					Marine.User_HealCooldown = -1; //No healing.
+					Marine.User_GrenadeThreshold = 192; //Squamish about grenades.
+					Marine.User_AlertRange = -1; //No alerting.
+					Break;
+				Case 4: //Normal difficulty
+					Marine.TakeInventory ("BasicArmor",75); //Most of the normal green armor.
+					Marine.DamageMultiply = 0.75; //Less damage.
+					Marine.ThreatLevel = KAI_Actor.THREAT_NORMAL;
+					
+					Marine.User_NoParkour = True; //Can't parkour, but they CAN take cover.
+					Marine.User_DodgeRange = 256; //Better dodging.
+					Marine.User_TurretDelay = 16*GameTicRate; //Uses turrets, but takes twice as long to go back to them.
+					Marine.User_HealCooldown = 80; //Rare healing.
+					Marine.User_GrenadeThreshold = 128; //Somewhat likely to throw grenades.
+					Marine.User_AlertRange = 256; //Short range alerts.
+					Break;
+				Case 8: //TRVE COMMUNITY APPROVED™ NORMAL DIFFICULTY
+					//Just normal marines lol.
+					Break;
+				//MAYDO: Have special handling for nightmare that replaces marines with SM_GigaMarine instead.
+				Case 16: //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					Marine.ThreatLevel = KAI_Actor.THREAT_DANGEROUS;
+					Marine.bAlwaysFast = True;
+					Marine.RemoveInventory (FindInventory("BasicArmor"));
+					Marine.GiveInventory ("BlueArmor",1);
+					Marine.GiveInventory ("PowerStrength",1);
+					Marine.GiveInventory ("PowerLightAmp",1);
+					Marine.Health = 200;
+					Marine.Scale.X = Marine.Default.Scale.X * 1.05;
+					Marine.Scale.Y = Marine.Default.Scale.Y * 1.10;
+					Marine.StartHealth = 110;
+					Marine.Health += 10;
+					Marine.User_GrenadeThreshold = 88; //Extra likely to use grenades.
+					Marine.User_HealCooldown = 10; //Heals allies fast.
+					Break;
+				Default:
+					Break;
+			}
+		}
+		
 		//Marine color overrides, only override if you're set to do so, and the marine doesn't already have a color, like by being map-placed.
 		If (!IsForMapMarine && Marine.User_Color ~== "") 
 		{
@@ -269,6 +339,7 @@ Class SMGameplay_Token : Inventory
 			Restrictor.NoHeal		= SMGRestrict_Heal;
 			Restrictor.NoWarn		= SMGRestrict_Warn;
 			Restrictor.NoReloadRun	= SMGRestrict_ReloadRun; //IDEA: Replace this with a slider that modifies the retreat factor user var instead?
+			Restrictor.NoEmplacements=SMGRestrict_Emplacements;
 			console.printf ("gameplay addon is restricting marine.");
 			Restrictor.MaxTargetRange = -1; //No range needed, this is map wide.
 		}

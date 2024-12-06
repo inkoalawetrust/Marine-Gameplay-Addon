@@ -11,6 +11,7 @@ Server Bool SMGameplay_NerfEnemyMarines = False;
 Server Bool SMGameplay_NerfFriendMarines = False;
 
 Server Bool SMGameplay_SkillScaling = True; //Skill based matchmaking.
+Server Int SMGameplay_SkillFilter	= 0; //An exact skill filter/level to use for SkillScaling instead of the maps'.
 Server Bool SMGameplay_PowerScaling = True; //Try to conform the marine to the threat level of what it replaced.
 
 Server Float SMGameplay_FriendDamageMul = 0.0; //Alter how much marine friends can be hurt by other allies.
@@ -29,6 +30,7 @@ Server Bool SMGRestrict_Dodge = False;
 Server Bool SMGRestrict_Heal = False;
 Server Bool SMGRestrict_Warn = False;
 Server Bool SMGRestrict_ReloadRun = False;
+Server Bool SMGRestrict_Emplacements = False;
 
 //Colors
 Server HandlerClass (SMGameplay_ChangeMarineColor) String SMGameplay_EnemyMarineColor = "Red";
