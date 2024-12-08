@@ -1,0 +1,2 @@
+alias SM_SpawnMarine "netevent SM_SpawnMarine:%1:%2:%3:%4"
+alias SMGR_Help "netevent SMGR_Help:%1"
