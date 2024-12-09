@@ -11,8 +11,6 @@ if it couldn't teleport all the marines it has "stored".*/
 //For item and monster replacements, try adding some kind of custom field for each for inserting custom classes to replace and the chance of doing so?
 //God fucking help me. A way to have MARINES PERSIST ACROSS MAPS?
 
-//#Include "ZScript/Token.zsc" //TODO: Move the SMGameplay_Token I'll likely need there.
-
 Class SMGR_Marine : SM_Marine{}
 
 Class SMGameplay_Handler : EventHandler
@@ -425,5 +423,145 @@ Class SMGameplay_Token : Inventory
 		//NOTE: Ran before ticking in vain hope of maybe not triggering a timing bug where the restrict token is given AFTER the marine has done the restricted action.
 		RestrictMarine (SM_Marine(Owner)); //Run token restrictions.
 		Super.DoEffect();
+	}
+}
+
+//The beacon in the players' inventory, one time use for each one only.
+Class SMGR_BeaconItem : Inventory
+{
+	Default
+	{
+		//$Title Marine Reinforcement Beacon
+		//$Category Powerups
+		//$NotAngled
+		Tag "Marine Reinforcement Beacon";
+		Inventory.MaxAmount 10;
+		Inventory.Amount 1;
+		Inventory.Icon "BEACA0";
+		+Inventory.HubPower;
+		+Inventory.PersistentPower;
+		+Inventory.InvBar;
+	}
+	
+	Override Bool Use (Bool Pickup)
+	{
+		If (Owner)
+		{
+			Actor Beacon = Spawn ("SMGR_Beacon",Owner.Pos.PlusZ(Owner.Height/2),ALLOW_REPLACE);
+			
+			If (Beacon)
+			{
+				Beacon.Vel3DFromAngle (16,Owner.Angle,Owner.Pitch); //Launch in the facing direction.
+				Beacon.Master = Owner;
+				Owner.TakeInventory (GetClass(),1); //Used up
+			}
+		}
+		Return Super.Use(Pickup);
+	}
+	
+	States
+	{
+		Spawn:
+			BEAC D -1;
+			Stop;
+	}
+}
+
+//The actual beacon item that spawns an amount of marines determined in the settings.
+Class SMGR_Beacon : Actor
+{
+	Default
+	{
+		Radius 4;
+		Height 24;
+		-NoGravity;
+	}
+	
+	Override Void PostBeginPlay()
+	{
+		Super.PostBeginPlay();
+		
+		Marines = 3; //PLACEHOLDER, REPLACE WITH CVAR!
+		BeepGlow.Color1 = "Red";
+		//BeepGlow.Texture.SetNull();
+		BeepGlow.Flags = SPF_FULLBRIGHT;
+		BeepGlow.Style = STYLE_ADD;
+		BeepGlow.LifeTime = 8;
+		BeepGlow.Size = 24;
+		BeepGlow.StartAlpha = 1.0;
+	}
+	
+	UInt Marines; //How many marines to spawn.
+	FSpawnParticleParams BeepGlow; //Red glow particle.
+	
+	//Beep boop maggot *teleports behind you*.
+	Void A_BeaconBeep()
+	{
+		A_StartSound ("SMGameplay/Beacon",attenuation:ATTN_STATIC);
+		BeepGlow.Pos = Vec3Offset (0,0,30);
+		Level.SpawnParticle(BeepGlow);
+	}
+	
+	States
+	{
+		//Beacon thrown, wait to fall to the ground.
+		//NOTE: Don't bother accounting for the beacon somehow ending up in the air again.
+		Spawn:
+			BEAC D 1
+			{
+				If (FloorZ >= Pos.Z)
+				{
+					A_Stop();
+					Return FindState("Activate");
+				}
+				
+				Return State (Null);
+			}
+			Loop;
+		//ERECTIN' A BEACON.
+		Activate:
+			BEAC DCB 8;
+			Goto Land;
+		//Beacon is latched to the ground, start teleporting however many marines in.
+		Land:
+			BEAC A 35;
+			BEAC A 0 A_BeaconBeep();
+			BEAC A 30;
+			BEAC A 0 A_BeaconBeep();
+			BEAC A 25;
+			BEAC A 0 A_BeaconBeep();
+			BEAC A 20;
+			BEAC A 0 A_BeaconBeep();
+			BEAC A 15;
+			BEAC A 0 A_BeaconBeep();
+			BEAC A 10;
+			BEAC A 0 A_BeaconBeep();
+			BEAC A 5;
+			BEAC A 0 A_BeaconBeep();
+			//Spawn addon marine in. Immediately starts following you and is assigned to a squad with you.
+			BEAC A 0
+			{
+				SM_Marine Marine = SM_Marine(Spawn("SMGR_Marine",Pos,ALLOW_REPLACE));
+				If (Marine)
+				{
+					If (Master) Marine.CopyFriendliness (Master,False);
+					Else Marine.CopyFriendliness (Self,False);
+					Marine.Angle = Random (0,36)*10;
+					Spawn (Marine.TeleFogDestType,Marine.Pos,ALLOW_REPLACE); //Spawn marines' destination fog, they do "teleport" in, after all.
+					If (Master) Marine.SetNPCOrder(Marine.ORDER_FOLLOW,False,Master); //Marine immediately starts following the player and is assigned to their group, as is normal marine behavior.
+					Else Marine.SetNPCOrder(Marine.ORDER_WANDER); //Fallback
+					Marines--; //Spawned one marine.
+				}
+			}
+			TNT1 A 0 A_JumpIf (Marines <= 0,"Deactivate"); //All marines spawned.
+			Loop;
+		//IDEA: Make sprite edits for the antenna folding back in once done?
+		//Cave Johnson, we're done here.
+		Deactivate:
+			BEAC A 35;
+			TNT1 A 0 A_StartSound ("SMGameplay/Beacon",attenuation:ATTN_STATIC,pitch:0.2);
+			BEAC BCD 16;
+			BEAC D -1;
+			Stop;
 	}
 }

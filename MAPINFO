@@ -1,3 +1,9 @@
+DoomEdNums
+{
+	8572 = SMGR_BeaconItem
+}
+
+
 GameInfo
 {
 	AddEventHandlers = "SMGameplay_Handler"
