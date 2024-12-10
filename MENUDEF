@@ -76,9 +76,9 @@ OptionMenu "Difficulty settings"
 	
 	StaticText ""
 	Option "Friendly marines have infinite ammo", "SMGameplay_Ally_InfiniteAmmo", "OnOff"
-	StaticText "Makes all addon-based friendly marines have infinite ammonution.", Green
+	StaticText "Makes all addon-based friendly marines have infinite ammunition.", Green
 	Option "Enemy marines have infinite ammo", "SMGameplay_Foe_InfiniteAmmo", "OnOff"
-	StaticText "Makes all addon-based hostile marines have infinite ammonution.", Green
+	StaticText "Makes all addon-based hostile marines have infinite ammunition.", Green
 	Option "Friendly marines phase through allies", "SMGameplay_FriendClip", "OnOff"
 	StaticText "Makes all addon-based friendly marines able to walk straight through allies.", Green
 	
@@ -131,7 +131,12 @@ OptionMenu "Monster replacements"
 OptionMenu "Item replacements"
 {
     Title "Item replacements"
-	StaticText "Sets the specific chances of any particular item to be replaced by a custom item.", Gray
+	Option "Force all marines to drop shotguns and chainguns.", "SMGR_VanillaDrops", "OnOff"
+	StaticText "Makes marines drop only vanilla guns that can be automatically replaced by other mods.", Gray
+	
+	StaticText ""
+	
+	StaticText "Set the specific chances of any particular item to be replaced by a custom item.", Gray
 	StaticText "0 is never, 255 is always", Gray
 	StaticText ""
 	Slider "Marine rifle replaces chaingun", "SMGR_Rifle_Chaingun", 0, 255, 5

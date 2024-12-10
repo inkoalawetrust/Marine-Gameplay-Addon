@@ -57,6 +57,10 @@ Class SMGameplay_Handler : EventHandler
 			
 			//NOW, give the item to the marine, now that the variable is set properly.
 			Token.CallTryPickup(E.Thing);
+			
+			//Don't drop rifles.
+			If (SMGR_VanillaDrops)
+				SM_Marine(E.Thing).User_NoWeaponDrop = True;
 		}
 	}
 	
@@ -274,6 +278,7 @@ Class SMGameplay_Token : Inventory
 		}
 		
 		//Marine color overrides, only override if you're set to do so, and the marine doesn't already have a color, like by being map-placed.
+		//BUG: Passing an empty string to the CVAR freezes the game.
 		If (!IsForMapMarine && Marine.User_Color ~== "") 
 		{
 			If (!Marine.bFriendly)
@@ -308,6 +313,7 @@ Class SMGameplay_Token : Inventory
 		Marine.SM_HandleMarineColoring (Marine.User_Color);
 	}
 	
+	//TODO: Fuck the marines' accuracy too.
 	Static Void SetMarineDifficulty (SM_Marine Marine, Int SkillFilter)
 	{console.printf ("skill issue filter is %d",skillfilter);
 		Switch (SkillFilter)
@@ -353,7 +359,6 @@ Class SMGameplay_Token : Inventory
 			Case 8: //TRVE COMMUNITY APPROVED™ NORMAL DIFFICULTY
 				//Just normal marines lol.
 				Break;
-			//MAYDO: Have special handling for nightmare that replaces marines with SM_GigaMarine instead.
 			Case 16: //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 				Marine.ThreatLevel = KAI_Actor.THREAT_DANGEROUS;
 				Marine.bAlwaysFast = True;
@@ -423,6 +428,19 @@ Class SMGameplay_Token : Inventory
 		//NOTE: Ran before ticking in vain hope of maybe not triggering a timing bug where the restrict token is given AFTER the marine has done the restricted action.
 		RestrictMarine (SM_Marine(Owner)); //Run token restrictions.
 		Super.DoEffect();
+	}
+	
+	Override Void OwnerDied()
+	{
+		Super.OwnerDied();
+		
+		If (SMGR_VanillaDrops)
+		{
+			SM_Marine(Owner).User_NoWeaponDrop = True; //Just in case.
+			//Try dropping a chaingun first, with the same chance as the rifle.
+			If (!Owner.A_DropItem("Chaingun",-1,48))
+				Owner.A_DropItem("Shotgun",-1,32); //If that fails, try dropping a shotgun too, for more variety for weapon replacement mods to take advantage of.
+		}
 	}
 }
 
@@ -555,7 +573,6 @@ Class SMGR_Beacon : Actor
 			}
 			TNT1 A 0 A_JumpIf (Marines <= 0,"Deactivate"); //All marines spawned.
 			Loop;
-		//IDEA: Make sprite edits for the antenna folding back in once done?
 		//Cave Johnson, we're done here.
 		Deactivate:
 			BEAC A 35;
