@@ -2,6 +2,23 @@
 //IDEA: Add Legacy of Rust or whatever support in the future?
 //NOTE: SMGR = SMGameplay_Replace(Whatever)
 Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Zombieman = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Shotgunner = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Chaingunner = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Imp = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Pinky = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Spectre = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_HellKnight = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_HellBaron = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Cacodemon = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Revenant = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Mancubus = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_LostSoul = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_PainElemental = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Arachnotron = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Archvile = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Nazi = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Cyberdemon = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Mastermind = 0;
 
 //Item replacements
 Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Rifle_Chaingun = 0;

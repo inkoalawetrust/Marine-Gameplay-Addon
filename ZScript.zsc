@@ -1,10 +1,6 @@
 Version "4.12"
 
 //TODO:
-//Add options for replacing specific monsters, with marines. With chances from 0-255 instead of bools, for finer control, maybe some presets too.
-/*Make a beacon teleporter item (With customizable marine amounts and stuff), that when thrown, spawns some amount of friendly marines. Also add settings for which
-items it replaces and the chances of it doing so. Also need to handle stuff like crammed spaces with it and shit, maybe like making it so you can pick it up again
-if it couldn't teleport all the marines it has "stored".*/
 //Add a setting to make the marine that replaces a specific class try to generally conform to its' threat level. i.e zombieman-replacing marines are weak as shit
 
 //IDEA:
@@ -35,6 +31,92 @@ Class SMGameplay_Handler : EventHandler
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True; //It's the final countdown, dooodooodooodooo, dooo-
 		}
+		Else If (E.Replacee == 'ShotgunGuy' && Random (0,255) < SMGR_Shotgunner)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'ChaingunGuy' && Random (0,255) < SMGR_Chaingunner)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Cacodemon' && Random (0,255) < SMGR_Cacodemon)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'BaronOfHell' && Random (0,255) < SMGR_HellBaron)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'HellKnight' && Random (0,255) < SMGR_HellKnight)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'DoomImp' && Random (0,255) < SMGR_Imp)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Demon' && Random (0,255) < SMGR_Pinky)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Spectre' && Random (0,255) < SMGR_Spectre)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Revenant' && Random (0,255) < SMGR_Revenant)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Fatso' && Random (0,255) < SMGR_Mancubus)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Arachnotron' && Random (0,255) < SMGR_Arachnotron)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Archvile' && Random (0,255) < SMGR_Archvile)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Cyberdemon' && Random (0,255) < SMGR_Cyberdemon)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'SpiderMastermind' && Random (0,255) < SMGR_Mastermind)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'WolfensteinSS' && Random (0,255) < SMGR_Nazi)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'LostSoul' && Random (0,255) < SMGR_LostSoul)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'PainElemental' && Random (0,255) < SMGR_PainElemental)
+		{
+			E.Replacement = "SMGR_Marine";
+			E.IsFinal = True;
+		}
+
 		
 		//Item replacements
 		If (E.Replacee == 'Chaingun' && Random (0,255) < SMGR_Rifle_Chaingun)

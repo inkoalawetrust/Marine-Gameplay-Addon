@@ -125,6 +125,23 @@ OptionMenu "Monster replacements"
 	StaticText "Sets the specific chances of any particular vanilla monster to be replaced by marines.", Gray
 	StaticText "0 is never, 255 is always", Gray
     Slider "Zombieman", "SMGR_Zombieman", 0, 255, 5
+	Slider "Shotgunner", "SMGR_Shotgunner", 0, 255, 5
+	Slider "Chaingunner", "SMGR_Chaingunner", 0, 255, 5
+	Slider "Pinky", "SMGR_Pinky", 0, 255, 5
+	Slider "Imp", "SMGR_Imp", 0, 255, 5
+	Slider "Spectre", "SMGR_Spectre", 0, 255, 5
+	Slider "Cacodemon", "SMGR_Cacodemon", 0, 255, 5
+	Slider "Hell Knight", "SMGR_HellKnight", 0, 255, 5
+	Slider "Hell Baron", "SMGR_HellBaron", 0, 255, 5
+	Slider "Get Lost, Soul", "SMGR_LostSoul", 0, 255, 5
+	Slider "Pain In The Ass Elemental", "SMGR_PainElemental", 0, 255, 5
+	Slider "Arachnotron", "SMGR_Arachnotron", 0, 255, 5
+	Slider "Mancubus", "SMGR_Mancubus", 0, 255, 5
+	Slider "Revenant", "SMGR_Revenant", 0, 255, 5
+	Slider "Archvile", "SMGR_Archvile", 0, 255, 5
+	Slider "Nazi", "SMGR_Nazi", 0, 255, 5
+	Slider "Cyberdemon", "SMGR_Cyberdemon", 0, 255, 5
+	Slider "Mastermind", "SMGR_Mastermind", 0, 255, 5
 }
 
 //Items replaced by marine-related items.
