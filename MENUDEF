@@ -131,13 +131,23 @@ OptionMenu "Monster replacements"
 OptionMenu "Item replacements"
 {
     Title "Item replacements"
+	StaticText "Set the specific chances of any particular item to be replaced by a custom item.", Gray
 	Option "Force all marines to drop shotguns and chainguns.", "SMGR_VanillaDrops", "OnOff"
 	StaticText "Makes marines drop only vanilla guns that can be automatically replaced by other mods.", Gray
 	
 	StaticText ""
-	
-	StaticText "Set the specific chances of any particular item to be replaced by a custom item.", Gray
 	StaticText "0 is never, 255 is always", Gray
 	StaticText ""
 	Slider "Marine rifle replaces chaingun", "SMGR_Rifle_Chaingun", 0, 255, 5
+	
+	StaticText ""
+	StaticText "Sets the chances of specific vanilla powerups to be replaced by marine beacons.", Gray
+	StaticText "0 is never, 255 is always", Gray
+    Slider "Blursphere", "SMGR_Beacon_Blursphere", 0, 255, 5
+	Slider "Megasphere", "SMGR_Beacon_Megasphere", 0, 255, 5
+    Slider "Soulsphere", "SMGR_Beacon_Soulsphere", 0, 255, 5
+    Slider "Lite Amp Gogglessphere", "SMGR_Beacon_LiteAmp", 0, 255, 5
+    Slider "Berserk", "SMGR_Beacon_Berserk", 0, 255, 5
+    Slider "Backpack", "SMGR_Beacon_Backpack", 0, 255, 5
+
 } 

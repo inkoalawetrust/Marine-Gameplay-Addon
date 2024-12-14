@@ -42,6 +42,39 @@ Class SMGameplay_Handler : EventHandler
 			E.Replacement = "SM_Rifle";
 			E.IsFinal = True;
 		}
+		
+		//Beacon replacements
+		//Item replacements
+		If (E.Replacee == 'Blursphere' && Random (0,255) < SMGR_Beacon_Blursphere)
+		{
+			E.Replacement = "SMGR_BeaconItem";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Soulsphere' && Random (0,255) < SMGR_Beacon_Soulsphere)
+		{
+			E.Replacement = "SMGR_BeaconItem";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Megasphere' && Random (0,255) < SMGR_Beacon_Megasphere)
+		{
+			E.Replacement = "SMGR_BeaconItem";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Infrared' && Random (0,255) < SMGR_Beacon_LiteAmp)
+		{
+			E.Replacement = "SMGR_BeaconItem";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Berserk' && Random (0,255) < SMGR_Beacon_Berserk)
+		{
+			E.Replacement = "SMGR_BeaconItem";
+			E.IsFinal = True;
+		}
+		Else If (E.Replacee == 'Backpack' && Random (0,255) < SMGR_Beacon_Backpack)
+		{
+			E.Replacement = "SMGR_BeaconItem";
+			E.IsFinal = True;
+		}
 	}
 	
 	Override Void WorldThingSpawned (WorldEvent E)

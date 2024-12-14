@@ -7,7 +7,13 @@ Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Zombieman = 0;
 Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Rifle_Chaingun = 0;
 Server Bool SMGR_VanillaDrops = False;
 
-//Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Blursphere = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Blursphere = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Soulsphere = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Megasphere = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_LiteAmp = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Berserk = 0;
+Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Backpack = 0;
+
 
 //Marine ability CVARs.
 Server Bool SMGameplay_NerfEnemyMarines = False;
