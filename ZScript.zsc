@@ -385,6 +385,7 @@ Class SMGameplay_Token : Inventory
 		}
 		
 		SM_Marine Marine = SM_Marine(Other);
+		
 		//Alter marine abilities (Using their user vars) based on the maps' skill level (Well, the skill FILTER more specifically, for universal-ish skill checks).
 		If (!IsForMapMarine && SMGameplay_SkillScaling)
 		{
@@ -500,6 +501,7 @@ Class SMGameplay_Token : Inventory
 	{
 		If (!Marine)
 			Return False;
+		
 		//Literally nothing is restricted.
 		If (!SMGRestrict_Cover && !SMGRestrict_Climb && !SMGRestrict_Jump && !SMGRestrict_Crouch /*&& !SMGRestrict_Swim*/ && !SMGRestrict_Dodge && !SMGRestrict_Heal &&
 		!SMGRestrict_Warn && !SMGRestrict_ReloadRun)
@@ -521,6 +523,7 @@ Class SMGameplay_Token : Inventory
 			Restrictor.NoWarn		= SMGRestrict_Warn;
 			Restrictor.NoReloadRun	= SMGRestrict_ReloadRun; //IDEA: Replace this with a slider that modifies the retreat factor user var instead?
 			Restrictor.NoEmplacements=SMGRestrict_Emplacements;
+			Restrictor.NoSmokescreens=SMGRestrict_Smokescreens;
 			console.printf ("gameplay addon is restricting marine.");
 			Restrictor.MaxTargetRange = -1; //No range needed, this is map wide.
 		}

@@ -116,6 +116,8 @@ OptionMenu "Restricted actions"
 	StaticText "Marines will never retreat to reload their rifles.", Green
 	Option "Don't use emplacements", "SMGRestrict_Emplacements", "OnOff"
 	StaticText "Marines will never use KAI emplacements.", Green
+	Option "Don't make smokescreens", "SMGRestrict_Smokescreens", "OnOff"
+	StaticText "Marines will never throw smoke grenades before retreating to reload.", Green
 }
 
 //Things the marines replace
