@@ -59,7 +59,7 @@ OptionMenu "Difficulty settings"
 	StaticText "dodge, heal allies, use grenades, or alert other KAI humanoids of enemies. Basically a strong zombieman.", Cream
 	StaticText "Easy: Half green armor, 75HP, 25% less damage and sight range. Can't parkour, take cover, use emplacements", Cyan
 	StaticText "can poorly dodge projectiles, and will rarely throw grenades.", Cyan
-	StaticText "Normal: 75 green armor, normal health and sight range, 25% less damage. Can't parkour, but can take cover", Brick
+	StaticText "Normal: 75 green armor, normal health and sight range, 25% less damage. Can't parkour, but can take cover,", Brick
 	StaticText "can decently dodge projectiles, sometimes uses grenades, takes twice as long to use turrets or heal allies", Brick
 	StaticText "can alert allies of enemies at half range", Brick
 	StaticText "Hard: Normal marines, no stat debuffs, can use all abilities and attacks normally.", Green
@@ -151,6 +151,8 @@ OptionMenu "Item replacements"
 	StaticText "Set the specific chances of any particular item to be replaced by a custom item.", Gray
 	Option "Force all marines to drop shotguns and chainguns.", "SMGR_VanillaDrops", "OnOff"
 	StaticText "Makes marines drop only vanilla guns that can be automatically replaced by other mods.", Gray
+	Option "Marines drop their items", "SMGR_DropItems", "OnOff"
+	StaticText "Makes marines with berserk packs and/or lite amp goggles sometimes drop them if in their inventory.", Gray
 	
 	StaticText ""
 	StaticText "0 is never, 255 is always", Gray
@@ -159,11 +161,10 @@ OptionMenu "Item replacements"
 	
 	StaticText ""
 	StaticText "Sets the chances of specific vanilla powerups to be replaced by marine beacons.", Gray
-	StaticText "0 is never, 255 is always", Gray
     Slider "Blursphere", "SMGR_Beacon_Blursphere", 0, 255, 5
 	Slider "Megasphere", "SMGR_Beacon_Megasphere", 0, 255, 5
     Slider "Soulsphere", "SMGR_Beacon_Soulsphere", 0, 255, 5
-    Slider "Lite Amp Gogglessphere", "SMGR_Beacon_LiteAmp", 0, 255, 5
+    Slider "Lite Amp Goggles", "SMGR_Beacon_LiteAmp", 0, 255, 5
     Slider "Berserk", "SMGR_Beacon_Berserk", 0, 255, 5
     Slider "Backpack", "SMGR_Beacon_Backpack", 0, 255, 5
 

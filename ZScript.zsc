@@ -556,6 +556,14 @@ Class SMGameplay_Token : Inventory
 			If (!Owner.A_DropItem("Chaingun",-1,48))
 				Owner.A_DropItem("Shotgun",-1,32); //If that fails, try dropping a shotgun too, for more variety for weapon replacement mods to take advantage of.
 		}
+		
+		If (SMGR_DropItems)
+		{
+			If (Owner.FindInventory ("PowerStrength",True))
+				Owner.A_DropItem ("Berserk",-1,24);
+			If (Owner.FindInventory ("PowerLightAmp",True))
+				Owner.A_DropItem ("Infrared",-1,48);
+		}
 	}
 }
 
