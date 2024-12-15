@@ -386,6 +386,8 @@ Class SMGameplay_Token : Inventory
 		
 		SM_Marine Marine = SM_Marine(Other);
 		
+		FollowRandDist = Random (-16,48);
+		
 		//Alter marine abilities (Using their user vars) based on the maps' skill level (Well, the skill FILTER more specifically, for universal-ish skill checks).
 		If (!IsForMapMarine && SMGameplay_SkillScaling)
 		{
@@ -541,10 +543,24 @@ Class SMGameplay_Token : Inventory
 			NewDamage *= SMGameplay_FriendDamageMul;
 	}
 	
+	Int FollowRandDist; //A randomized unique distance at which the marine follows actors, replicagin how FollowDist is normally set for marines.
+	
 	Override Void DoEffect()
 	{
+		If (SM_Marine(Owner).IsDead(Owner))
+			Return;
 		//NOTE: Ran before ticking in vain hope of maybe not triggering a timing bug where the restrict token is given AFTER the marine has done the restricted action.
 		RestrictMarine (SM_Marine(Owner)); //Run token restrictions.
+		//If the followdist override is set to 0 or above, use that for all marines.
+		If (SMGameplay_FollowDist >= 1)
+			SM_Marine(Owner).FollowDist = SMGameplay_FollowDist + FollowRandDist;
+		//If at 0, marines just don't keep any distance from who they follow.
+		Else If (!SMGameplay_FollowDist)
+			SM_Marine(Owner).FollowDist = 0;
+		//Dist is at -1 or less, revert to the default marine followdist of 128MU.
+		Else
+			SM_Marine(Owner).FollowDist = 128 + FollowRandDist;
+		
 		Super.DoEffect();
 	}
 	

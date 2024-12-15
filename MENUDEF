@@ -74,6 +74,10 @@ OptionMenu "Difficulty settings"
 	Slider "Ally damage multiplier", "SMGameplay_FriendDamageMul", 0.0, 10.0, 0.1, 1
 	StaticText "How much damage all friendly marines receive from players and other allies. Default is 0, i.e no friendly fire", Green
 	
+	Slider "Marine follow distance", "SMGameplay_FollowDist", -1, 512, 1, 0
+	StaticText "How close a marine gets to the player (Or anyone they follow), before stopping to not dogpile on them, in map units", Green
+	StaticText "Affects all marines, -1 sets the marine back to their default follow radius. 0 disables this standoff distance entirely", Green
+	
 	StaticText ""
 	Option "Friendly marines have infinite ammo", "SMGameplay_Ally_InfiniteAmmo", "OnOff"
 	StaticText "Makes all addon-based friendly marines have infinite ammunition.", Green
