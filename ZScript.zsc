@@ -576,6 +576,15 @@ Class SMGameplay_Token : Inventory
 		If (SM_RubberDist <= 0 || SM_RubberTime <= 0 || !Owner)
 			Return;
 		
+		SM_Marine Marine = SM_Marine(Owner);
+		
+		If (!Marine)
+			Return;
+		
+		//No rubberbanding when not ordered to follow anything or busy with other things.
+		If (Marine.IsInState (Marine,"Spawn") || Marine.CurrentOrder != Marine.ORDER_FOLLOW || !(Marine.MarineState & Marine.MARINE_IDLING))
+			Return;
+		
 		Vector3 Lol;
 		Actor Following;
 		[Lol, Following] = KAI_Actor(Owner).HandleFollowingActor (Lol);
@@ -583,18 +592,21 @@ Class SMGameplay_Token : Inventory
 			Return;
 		
 		//Too far from followee.
-		If (Following && Owner.Distance3DSquared(Following) >= SM_RubberDist*SM_RubberDist && !Owner.CheckSight(Following,SF_IGNOREWATERBOUNDARY))
+		If (Following && Owner.Distance3DSquared(Following) >= SM_RubberDist*SM_RubberDist && Owner.CheckSight(Following,SF_IGNOREWATERBOUNDARY))
 			RubberTime++;
 		Else
 			RubberTime = 0;
-		console.printf ("rubbering towards %d for %d tics, following is %p",sm_rubbertime,rubbertime,following);
+		
 		//If you've been outta range for roughly SM_RubberTime seconds long, teleport.
 		If (RubberTime >= SM_RubberTime*GameTicRate/* && Random (0,255) < 32*/)
 		{
+			Bool Stomp = Owner.bNoTelestomp;
+			Owner.bNoTelestomp = True;
 			Owner.Teleport (GetRubberbandDestination(Following),0,TELF_KEEPORIENTATION);
+			Owner.bNoTelestomp = Stomp;
 			KAI_Actor(Owner).NextMovePos = (Double.NaN, Double.NaN, Double.NaN);
+			Owner.Angle = AngleTo(Following) + Random (35,-35); //Roughly face the follow target.
 			RubberTime = 0;
-			console.printf ("teleported %p to %d %d %D",owner,owner.pos);
 		}
 	}
 	
@@ -604,7 +616,7 @@ Class SMGameplay_Token : Inventory
 		//Copy and pasted from KAI's FindRandomMovePos().
 		Array <Double> Xs; Array <Double> Ys; Array <Double> Zs;
 		Vector3 CurPos; //The position we are currently checking. Reconstructed from the above arrays.
-		Int Attempts = 256;
+		Int Attempts = 384;
 		Double CheckRad = 384;
 		
 		For (Int I = 0; I <= Attempts; I++)
@@ -618,18 +630,23 @@ Class SMGameplay_Token : Inventory
 		For (Int I = Attempts-1; I >= 0; I--)
 		{
 			CurPos = (Xs[I],Ys[I],Zs[I]); //Reconstruct each vector.
+			CurPos = Level.Vec3Offset(Followee.Pos,CurPos);
 			SightTarget.SetXYZ (CurPos); //Move the target to the pos for the visibility check.
-			//If it's out of bounds, not visible, *IN SIGHT OF THE FOLLOWEE*, or can't be walked to. We can't go there. So remove that potential position.
-			If (!Level.IsPointInLevel (CurPos) || !Owner.CheckSight(SightTarget,SF_IGNOREVISIBILITY) || AbsAngle (Followee.Angle,AngleTo(SightTarget)) <= 120 ||
-			!SM_Marine(Owner).SM_IsPosReachable (CurPos,Followee.Radius*1.5,Owner.Speed))
-			{console.printf ("marine is %.2f degrees away from the player",Followee.AbsAngle (Followee.Angle,AngleTo(SightTarget)));
+			console.printf ("according to gzdoom's infinite wisdom, there is a valid line of sight from %d %d %d to %d %d %d",sighttarget.pos,followee.pos);
+			//AbsAngle (Followee.Angle,AngleTo(SightTarget)) <= 120
+			If (!Level.IsPointInLevel (CurPos) || Followee.CheckFOV(SightTarget,120) || !SightTarget.CheckSight(Followee,SF_IGNOREWATERBOUNDARY)/* ||
+			!SM_Marine(Owner).SM_IsPosReachable (CurPos,Followee.Radius*1.5,Owner.Speed,True)*/)
+			{console.printf ("%d %d %d is invalid",curpos);
 				Xs.Delete (I); Ys.Delete(I); Zs.Delete(I);
 			}
+			
+			FSpawnParticleParams P; P.Color1 = "Green"; P.Style = STYLE_None; P.Lifetime = 5000; P.Size = 4; P.StartAlpha = 1; P.FadeStep = -1; P.Flags = SPF_FULLBRIGHT;
+			KAI_LOFRaycast.VisualizeTracePath(CurPos,Followee.Pos,Level.Vec3Diff(CurPos,Followee.Pos).Length(),8,P);
 		}
 		SightTarget.Destroy();
-		
+		console.printf ("%d valid positions",xs.size());
 		//No valid positions found, return the followees' position.
-		If (Xs.Size() == 0)
+		If (Xs.Size() == 1)
 		{
 			If (Followee)
 				Return Followee.Pos;
