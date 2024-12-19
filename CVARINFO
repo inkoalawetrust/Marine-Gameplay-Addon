@@ -32,6 +32,11 @@ Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_LiteAmp = 0;
 Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Berserk = 0;
 Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Backpack = 0;
 
+//Rubberbanding
+Server Int SM_RubberDist = 0;
+Server Int SM_RubberTime = 10;
+Server Bool SM_RubberNPC = False;
+
 //Marine ability CVARs.
 Server Int SMGameplay_FollowDist = -1;
 

@@ -6,6 +6,7 @@ AddOptionMenu "OptionsMenu"
 //The mods' settings.
 OptionMenu "Marine Gameplay Options"
 {
+	Title "Marine Gameplay Options"
 	Submenu "Difficulty settings", "Difficulty settings"
     Submenu "Monster replacements", "Monster replacements"
 	Submenu "Item replacements", "Item replacements"
@@ -22,6 +23,15 @@ OptionMenu "Marine Gameplay Options"
 	StaticText "The color of all enemy marines"
 	TextField "Friendly marine color", "SMGameplay_FriendMarineColor"
 	StaticText "The color of all friendly marines"
+	
+	StaticText ""
+	StaticText "Follower rubberbanding options", Gold
+	Slider "Marine follow distance", "SM_RubberDist", 0, 8192, 128, 0
+	StaticText "How far the marine must be from the actor they're following to teleport back to them", Green
+	Slider "Marine follow time", "SM_RubberTime", 0, 600, 1, 0
+	StaticText "How many seconds must the marine be too far from their follow target to teleport back", Green
+	Option "Marines rubberband to NPCs", "SM_RubberNPC", "OnOff"
+	StaticText "Should marines also teleport back to NPCs that they are following, and not just players", Green
 }
 
 //Sub menus
@@ -154,13 +164,13 @@ OptionMenu "Monster replacements"
 OptionMenu "Item replacements"
 {
     Title "Item replacements"
-	StaticText "Set the specific chances of any particular item to be replaced by a custom item.", Gray
 	Option "Force all marines to drop shotguns and chainguns.", "SMGR_VanillaDrops", "OnOff"
 	StaticText "Makes marines drop only vanilla guns that can be automatically replaced by other mods.", Gray
 	Option "Marines drop their items", "SMGR_DropItems", "OnOff"
 	StaticText "Makes marines with berserk packs and/or lite amp goggles sometimes drop them if in their inventory.", Gray
 	
 	StaticText ""
+	StaticText "Set the specific chances of any particular item to be replaced by a custom item.", Gray
 	StaticText "0 is never, 255 is always", Gray
 	StaticText ""
 	Slider "Marine rifle replaces chaingun", "SMGR_Rifle_Chaingun", 0, 255, 5

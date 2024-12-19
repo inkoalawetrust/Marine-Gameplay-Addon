@@ -4,6 +4,8 @@ Version "4.12"
 //Add a setting to make the marine that replaces a specific class try to generally conform to its' threat level. i.e zombieman-replacing marines are weak as shit
 
 //IDEA:
+//Make companion mod esque features, like a setting to make marines following the player (Or any actor) silently teleport out of sight if too far/out of sight.
+//A hotkey to be able to order marines and other KAI NPCs from further away? Not sure how it'd work, an InputEvent or something?
 //For item and monster replacements, try adding some kind of custom field for each for inserting custom classes to replace and the chance of doing so?
 //God fucking help me. A way to have MARINES PERSIST ACROSS MAPS?
 
@@ -193,7 +195,7 @@ Class SMGameplay_Handler : EventHandler
 		//Command that spawns a marine, with simplistic parameters.
 		//Parameters: Friendliness, Armor Class, Skill Level, Color
 		If (Command[0] ~== "SM_SpawnMarine")
-		{console.printf ("command string %s",e.name);
+		{
 			Vector3 SpawnPos = PlrMo.Vec3Angle (64,PlrMo.Angle); //64MU in front of the player.
 			SM_Marine Marine = SM_Marine(Actor.Spawn("SMGR_Marine",SpawnPos));
 			Marine.Angle = PlrMo.Angle;
@@ -544,6 +546,7 @@ Class SMGameplay_Token : Inventory
 	}
 	
 	Int FollowRandDist; //A randomized unique distance at which the marine follows actors, replicagin how FollowDist is normally set for marines.
+	Int RubberTime; //How long the marine can stay too far from who they following before teleporting to them.
 	
 	Override Void DoEffect()
 	{
@@ -561,7 +564,83 @@ Class SMGameplay_Token : Inventory
 		Else
 			SM_Marine(Owner).FollowDist = 128 + FollowRandDist;
 		
+		If (!IsFrozen()) RubberbandMarine();
+		
 		Super.DoEffect();
+	}
+	
+	//Teleport the marine if they're too far from whoever they're following and for too long.
+	Void RubberbandMarine()
+	{
+		//Disabled
+		If (SM_RubberDist <= 0 || SM_RubberTime <= 0 || !Owner)
+			Return;
+		
+		Vector3 Lol;
+		Actor Following;
+		[Lol, Following] = KAI_Actor(Owner).HandleFollowingActor (Lol);
+		If (Following && !Following.Player && !SM_RubberNPC) //No rubberbanding when following other NPCs.
+			Return;
+		
+		//Too far from followee.
+		If (Following && Owner.Distance3DSquared(Following) >= SM_RubberDist*SM_RubberDist && !Owner.CheckSight(Following,SF_IGNOREWATERBOUNDARY))
+			RubberTime++;
+		Else
+			RubberTime = 0;
+		console.printf ("rubbering towards %d for %d tics, following is %p",sm_rubbertime,rubbertime,following);
+		//If you've been outta range for roughly SM_RubberTime seconds long, teleport.
+		If (RubberTime >= SM_RubberTime*GameTicRate/* && Random (0,255) < 32*/)
+		{
+			Owner.Teleport (GetRubberbandDestination(Following),0,TELF_KEEPORIENTATION);
+			KAI_Actor(Owner).NextMovePos = (Double.NaN, Double.NaN, Double.NaN);
+			RubberTime = 0;
+			console.printf ("teleported %p to %d %d %D",owner,owner.pos);
+		}
+	}
+	
+	//Find a hopefully out of sight destination to teleport to.
+	Vector3 GetRubberbandDestination (Actor Followee)
+	{
+		//Copy and pasted from KAI's FindRandomMovePos().
+		Array <Double> Xs; Array <Double> Ys; Array <Double> Zs;
+		Vector3 CurPos; //The position we are currently checking. Reconstructed from the above arrays.
+		Int Attempts = 256;
+		Double CheckRad = 384;
+		
+		For (Int I = 0; I <= Attempts; I++)
+		{
+			CurPos = Vec3Offset (FRandom(CheckRad,-CheckRad),FRandom(CheckRad,-CheckRad),0);
+			CurPos.Z = GetZAt (CurPos.X,CurPos.Y,0,GZF_ABSOLUTEPOS)+(Height/2);
+			Xs.Push (CurPos.X); Ys.Push (CurPos.Y); Zs.Push (CurPos.Z); //Epic GZDoom fail.
+		}
+		
+		Actor SightTarget = Spawn ("KAI_TempPoint",Pos);
+		For (Int I = Attempts-1; I >= 0; I--)
+		{
+			CurPos = (Xs[I],Ys[I],Zs[I]); //Reconstruct each vector.
+			SightTarget.SetXYZ (CurPos); //Move the target to the pos for the visibility check.
+			//If it's out of bounds, not visible, *IN SIGHT OF THE FOLLOWEE*, or can't be walked to. We can't go there. So remove that potential position.
+			If (!Level.IsPointInLevel (CurPos) || !Owner.CheckSight(SightTarget,SF_IGNOREVISIBILITY) || AbsAngle (Followee.Angle,AngleTo(SightTarget)) <= 120 ||
+			!SM_Marine(Owner).SM_IsPosReachable (CurPos,Followee.Radius*1.5,Owner.Speed))
+			{console.printf ("marine is %.2f degrees away from the player",Followee.AbsAngle (Followee.Angle,AngleTo(SightTarget)));
+				Xs.Delete (I); Ys.Delete(I); Zs.Delete(I);
+			}
+		}
+		SightTarget.Destroy();
+		
+		//No valid positions found, return the followees' position.
+		If (Xs.Size() == 0)
+		{
+			If (Followee)
+				Return Followee.Pos;
+			Else
+				Return (Double.NaN, Double.NaN, Double.NaN);
+		}
+		
+		//Return random position from the available outta sight ones.
+		Int RNGesus = Random (0,Xs.Size()-1);
+		Vector3 Dest = (Xs[RNGesus],Ys[RNGesus],Zs[RNGesus]);
+		Return Level.Vec3Offset (Followee.Pos,Dest);
 	}
 	
 	Override Void OwnerDied()
