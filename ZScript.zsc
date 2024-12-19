@@ -592,7 +592,7 @@ Class SMGameplay_Token : Inventory
 			Return;
 		
 		//Too far from followee.
-		If (Following && Owner.Distance3DSquared(Following) >= SM_RubberDist*SM_RubberDist && Owner.CheckSight(Following,SF_IGNOREWATERBOUNDARY))
+		If (Following && Owner.Distance3DSquared(Following) >= SM_RubberDist*SM_RubberDist && !Owner.CheckSight(Following,SF_IGNOREWATERBOUNDARY))
 			RubberTime++;
 		Else
 			RubberTime = 0;
@@ -632,19 +632,14 @@ Class SMGameplay_Token : Inventory
 			CurPos = (Xs[I],Ys[I],Zs[I]); //Reconstruct each vector.
 			CurPos = Level.Vec3Offset(Followee.Pos,CurPos);
 			SightTarget.SetXYZ (CurPos); //Move the target to the pos for the visibility check.
-			console.printf ("according to gzdoom's infinite wisdom, there is a valid line of sight from %d %d %d to %d %d %d",sighttarget.pos,followee.pos);
-			//AbsAngle (Followee.Angle,AngleTo(SightTarget)) <= 120
 			If (!Level.IsPointInLevel (CurPos) || Followee.CheckFOV(SightTarget,120) || !SightTarget.CheckSight(Followee,SF_IGNOREWATERBOUNDARY)/* ||
 			!SM_Marine(Owner).SM_IsPosReachable (CurPos,Followee.Radius*1.5,Owner.Speed,True)*/)
-			{console.printf ("%d %d %d is invalid",curpos);
+			{
 				Xs.Delete (I); Ys.Delete(I); Zs.Delete(I);
 			}
-			
-			FSpawnParticleParams P; P.Color1 = "Green"; P.Style = STYLE_None; P.Lifetime = 5000; P.Size = 4; P.StartAlpha = 1; P.FadeStep = -1; P.Flags = SPF_FULLBRIGHT;
-			KAI_LOFRaycast.VisualizeTracePath(CurPos,Followee.Pos,Level.Vec3Diff(CurPos,Followee.Pos).Length(),8,P);
 		}
 		SightTarget.Destroy();
-		console.printf ("%d valid positions",xs.size());
+		
 		//No valid positions found, return the followees' position.
 		If (Xs.Size() == 1)
 		{
