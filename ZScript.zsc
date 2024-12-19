@@ -4,7 +4,6 @@ Version "4.12"
 //Add a setting to make the marine that replaces a specific class try to generally conform to its' threat level. i.e zombieman-replacing marines are weak as shit
 
 //IDEA:
-//Make companion mod esque features, like a setting to make marines following the player (Or any actor) silently teleport out of sight if too far/out of sight.
 //A hotkey to be able to order marines and other KAI NPCs from further away? Not sure how it'd work, an InputEvent or something?
 //For item and monster replacements, try adding some kind of custom field for each for inserting custom classes to replace and the chance of doing so?
 //God fucking help me. A way to have MARINES PERSIST ACROSS MAPS?
@@ -435,7 +434,7 @@ Class SMGameplay_Token : Inventory
 	
 	//TODO: Fuck the marines' accuracy too.
 	Static Void SetMarineDifficulty (SM_Marine Marine, Int SkillFilter)
-	{console.printf ("skill issue filter is %d",skillfilter);
+	{
 		Switch (SkillFilter)
 		{
 			Case 1: //Skill issue.
@@ -444,6 +443,7 @@ Class SMGameplay_Token : Inventory
 				Marine.DamageMultiply = 0.5; //Crap damage
 				Marine.MaxTargetRange *= 0.5; //Myopic marines.
 				Marine.ThreatLevel = KAI_Actor.THREAT_LOW;
+				Marine.Inaccuracy *= 2.5;
 				
 				Marine.User_NoParkour = Marine.User_NoCover = True; //Fat and stupid marines.
 				Marine.User_DodgeRange = -1; //Slowpoke marines.
@@ -456,6 +456,7 @@ Class SMGameplay_Token : Inventory
 				Marine.DamageMultiply = 0.75; //Less damage.
 				Marine.MaxTargetRange *= 0.75; //Needs prescription glasses.
 				Marine.ThreatLevel = KAI_Actor.THREAT_MILD;
+				Marine.Inaccuracy *= 2.0;
 				
 				Marine.User_NoParkour = Marine.User_NoCover = True; //Fat and stupid marines.
 				Marine.User_DodgeRange = 128; //Bad dodging.
@@ -468,6 +469,7 @@ Class SMGameplay_Token : Inventory
 				Marine.TakeInventory ("BasicArmor",25); //Most of the normal green armor.
 				Marine.DamageMultiply = 0.75; //Less damage.
 				Marine.ThreatLevel = KAI_Actor.THREAT_NORMAL;
+				Marine.Inaccuracy *= 1.5;
 				
 				Marine.User_NoParkour = True; //Can't parkour, but they CAN take cover.
 				Marine.User_DodgeRange = 256; //Better dodging.
@@ -486,6 +488,7 @@ Class SMGameplay_Token : Inventory
 				Marine.GiveInventory ("BlueArmor",1);
 				Marine.GiveInventory ("PowerStrength",1);
 				Marine.GiveInventory ("PowerLightAmp",1);
+				Marine.Inaccuracy = (0,0,0);
 				Marine.Health = 200;
 				Marine.Scale.X = Marine.Default.Scale.X * 1.05;
 				Marine.Scale.Y = Marine.Default.Scale.Y * 1.10;

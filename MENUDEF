@@ -10,6 +10,7 @@ OptionMenu "Marine Gameplay Options"
 	Submenu "Difficulty settings", "Difficulty settings"
     Submenu "Monster replacements", "Monster replacements"
 	Submenu "Item replacements", "Item replacements"
+	Submenu "Marine CVARs", "Marine CVARs"
 	
 	StaticText ""
 	StaticText "Marine color options", Blue
@@ -45,6 +46,7 @@ OptionValue SkillFilters
 	8, "Hard"
 	16,"Very Hard"
 }
+
 OptionMenu "Difficulty settings"
 {
 	Title "Marine difficulty settings"
@@ -65,16 +67,16 @@ OptionMenu "Difficulty settings"
 	
 	StaticText ""
 	StaticText "The marines' abilities for each skill filter are:", Green
-	StaticText "Very Easy: No armor, half health, half damage, half sight range. Can't parkour, take cover, use emplacements,", Cream
+	StaticText "Very Easy: No armor, half health, half damage, half sight range, terrible aim. Can't parkour, take cover, use emplacements,", Cream
 	StaticText "dodge, heal allies, use grenades, or alert other KAI humanoids of enemies. Basically a strong zombieman.", Cream
-	StaticText "Easy: Half green armor, 75HP, 25% less damage and sight range. Can't parkour, take cover, use emplacements", Cyan
+	StaticText "Easy: Half green armor, 75HP, 25% less damage and sight range, bad aim. Can't parkour, take cover, use emplacements", Cyan
 	StaticText "can poorly dodge projectiles, and will rarely throw grenades.", Cyan
-	StaticText "Normal: 75 green armor, normal health and sight range, 25% less damage. Can't parkour, but can take cover,", Brick
+	StaticText "Normal: 75 green armor, normal health and sight range, 25% less damage, meh aim. Can't parkour, but can take cover,", Brick
 	StaticText "can decently dodge projectiles, sometimes uses grenades, takes twice as long to use turrets or heal allies", Brick
 	StaticText "can alert allies of enemies at half range", Brick
 	StaticText "Hard: Normal marines, no stat debuffs, can use all abilities and attacks normally.", Green
 	StaticText "Very Hard: 210 health, 200 blue armor, maximum marine height and width, more likely to throw grenades,", Fire
-	StaticText "heals allies 4 times as fast, moves slightly faster, can reload and climb twice as fast.", Fire
+	StaticText "heals allies 4 times as fast, moves slightly faster, can reload and climb twice as fast, and perfect aim.", Fire
 	StaticText "Has light amp goggles (Can see players with blurspheres and past smoke screens)", Fire
 	StaticText "Has a berserk pack (Does multiple times more melee damage and is much more likely to do melee attacks)", Fire
 	
@@ -184,4 +186,18 @@ OptionMenu "Item replacements"
     Slider "Berserk", "SMGR_Beacon_Berserk", 0, 255, 5
     Slider "Backpack", "SMGR_Beacon_Backpack", 0, 255, 5
 
-} 
+}
+
+OptionMenu "Marine CVARs"
+{
+	Title "Marine CVARs"
+	StaticText "A menu for changing all the smart marine CVARs without the console", Gray
+	StaticText ""
+	
+	Option "Don't turn on +DOSHADOWBLOCK for monsters", "SM_Disable_DoShadowblock", "OnOff"
+	StaticText "Disables turning on the +DOSHADOWBLOCK flag for NPCs, which is needed for the smokescreens to work", Green
+	Option "Simple marine fire mode check", "SM_DumbHitCheck", "OnOff"
+	StaticText "Instead of firing traces to determine how many hits they will land on a target, marines will use pure math, should be faster", Green
+	Option "Enable flashbang ringing", "SM_FlashbangSound", "OnOff"
+	StaticText "Set to off to disable the flashbang grenades' ringing, in case the sound is too painful", Green
+}
