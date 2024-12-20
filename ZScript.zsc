@@ -117,7 +117,6 @@ Class SMGameplay_Handler : EventHandler
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-
 		
 		//Item replacements
 		If (E.Replacee == 'Chaingun' && Random (0,255) < SMGR_Rifle_Chaingun)
@@ -127,7 +126,6 @@ Class SMGameplay_Handler : EventHandler
 		}
 		
 		//Beacon replacements
-		//Item replacements
 		If (E.Replacee == 'Blursphere' && Random (0,255) < SMGR_Beacon_Blursphere)
 		{
 			E.Replacement = "SMGR_BeaconItem";
@@ -312,7 +310,6 @@ Class SMGameplay_ReplaceClamp : CustomIntCVAR
 {
 	Override Int ModifyValue (Name CVarName, Int Val)
 	{
-		if (kai_debugprintmessages) console.printf ("%s value was %d, now it'll be %d",cvarname,val,Clamp (Val,0,255));
 		Return Clamp (Val,0,255);
 	}
 }
@@ -372,7 +369,6 @@ Class SMGameplay_Token : Inventory
 			Return;
 		}
 		
-		console.printf ("isformapmarine for %p is set to %d",other,isformapmarine);
 		//Nerf marine stats.
 		If (!IsForMapMarine && !SMGameplay_SkillScaling)
 		{
@@ -432,7 +428,6 @@ Class SMGameplay_Token : Inventory
 		Marine.SM_HandleMarineColoring (Marine.User_Color);
 	}
 	
-	//TODO: Fuck the marines' accuracy too.
 	Static Void SetMarineDifficulty (SM_Marine Marine, Int SkillFilter)
 	{
 		Switch (SkillFilter)
@@ -531,7 +526,6 @@ Class SMGameplay_Token : Inventory
 			Restrictor.NoReloadRun	= SMGRestrict_ReloadRun; //IDEA: Replace this with a slider that modifies the retreat factor user var instead?
 			Restrictor.NoEmplacements=SMGRestrict_Emplacements;
 			Restrictor.NoSmokescreens=SMGRestrict_Smokescreens;
-			console.printf ("gameplay addon is restricting marine.");
 			Restrictor.MaxTargetRange = -1; //No range needed, this is map wide.
 		}
 		Restrictor.CallTryPickup (Marine); //Pick up the token

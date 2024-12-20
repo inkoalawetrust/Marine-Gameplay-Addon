@@ -17,16 +17,18 @@ OptionMenu "Marine Gameplay Options"
 	StaticText "Settings for overriding the colors of marines in real time, available marine colors:", Yellow
 	StaticText "Red, Gray, White, Black, Blue, Yellow, Orange, Pink, DarkGreen, DarkRed", Yellow
 	StaticText "Random: Special color, picks any of the above or no color at all.", Yellow
-	StaticText "Empty string: If the color setting is left empty, it just means \"no custom color\"", Yellow
+	StaticText "Default: Special color, means the marine has no custom color.", Yellow
 	StaticText "These settings ONLY work for marines that are placed in by this addon. Not map-spawned marines!", Red
 	StaticText ""
 	TextField "Enemy marine color", "SMGameplay_EnemyMarineColor"
-	StaticText "The color of all enemy marines"
+	StaticText "The color of all enemy marines", Green
 	TextField "Friendly marine color", "SMGameplay_FriendMarineColor"
-	StaticText "The color of all friendly marines"
+	StaticText "The color of all friendly marines", Green
 	
 	StaticText ""
 	StaticText "Follower rubberbanding options", Gold
+	StaticText "Settings for controlling the companion mod-esque teleportation, set the time or distance to 0 to turn off", Green
+	StaticText ""
 	Slider "Marine follow distance", "SM_RubberDist", 0, 8192, 128, 0
 	StaticText "How far the marine must be from the actor they're following to teleport back to them", Green
 	Slider "Marine follow time", "SM_RubberTime", 0, 600, 1, 0
