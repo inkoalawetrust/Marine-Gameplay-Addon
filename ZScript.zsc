@@ -128,32 +128,32 @@ Class SMGameplay_Handler : EventHandler
 		//Beacon replacements
 		If (E.Replacee == 'Blursphere' && Random (0,255) < SMGR_Beacon_Blursphere)
 		{
-			E.Replacement = "SMGR_BeaconItem";
+			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
 		Else If (E.Replacee == 'Soulsphere' && Random (0,255) < SMGR_Beacon_Soulsphere)
 		{
-			E.Replacement = "SMGR_BeaconItem";
+			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
 		Else If (E.Replacee == 'Megasphere' && Random (0,255) < SMGR_Beacon_Megasphere)
 		{
-			E.Replacement = "SMGR_BeaconItem";
+			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
 		Else If (E.Replacee == 'Infrared' && Random (0,255) < SMGR_Beacon_LiteAmp)
 		{
-			E.Replacement = "SMGR_BeaconItem";
+			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
 		Else If (E.Replacee == 'Berserk' && Random (0,255) < SMGR_Beacon_Berserk)
 		{
-			E.Replacement = "SMGR_BeaconItem";
+			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
 		Else If (E.Replacee == 'Backpack' && Random (0,255) < SMGR_Beacon_Backpack)
 		{
-			E.Replacement = "SMGR_BeaconItem";
+			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
 	}
@@ -675,7 +675,7 @@ Class SMGameplay_Token : Inventory
 }
 
 //The beacon in the players' inventory, one time use for each one only.
-Class SMGR_BeaconItem : Inventory
+Class SMGR_Beacon : Inventory
 {
 	Default
 	{
@@ -695,7 +695,7 @@ Class SMGR_BeaconItem : Inventory
 	{
 		If (Owner)
 		{
-			Actor Beacon = Spawn ("SMGR_Beacon",Owner.Pos.PlusZ(Owner.Height/2),ALLOW_REPLACE);
+			Actor Beacon = Spawn ("SMGR_BeaconDrop",Owner.Pos.PlusZ(Owner.Height/2),ALLOW_REPLACE);
 			
 			If (Beacon)
 			{
@@ -716,7 +716,7 @@ Class SMGR_BeaconItem : Inventory
 }
 
 //The actual beacon item that spawns an amount of marines determined in the settings.
-Class SMGR_Beacon : Actor
+Class SMGR_BeaconDrop : Actor
 {
 	Default
 	{
@@ -729,7 +729,7 @@ Class SMGR_Beacon : Actor
 	{
 		Super.PostBeginPlay();
 		
-		Marines = 3; //PLACEHOLDER, REPLACE WITH CVAR!
+		Marines = SMGR_BeaconAmount;
 		BeepGlow.Color1 = "Red";
 		//BeepGlow.Texture.SetNull();
 		BeepGlow.Flags = SPF_FULLBRIGHT;

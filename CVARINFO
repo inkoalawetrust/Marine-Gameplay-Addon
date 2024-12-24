@@ -25,6 +25,8 @@ Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Rifle_Chaingun = 0;
 Server Bool SMGR_VanillaDrops = False;
 Server Bool SMGR_DropItems = False;
 
+Server Int SMGR_BeaconAmount = 3;
+
 Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Blursphere = 0;
 Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Soulsphere = 0;
 Server HandlerClass (SMGameplay_ReplaceClamp) Int SMGR_Beacon_Megasphere = 0;

@@ -172,6 +172,8 @@ OptionMenu "Item replacements"
 	StaticText "Makes marines drop only vanilla guns that can be automatically replaced by other mods.", Gray
 	Option "Marines drop their items", "SMGR_DropItems", "OnOff"
 	StaticText "Makes marines with berserk packs and/or lite amp goggles sometimes drop them if in their inventory.", Gray
+	Slider "Beacon marine amount", "SMGR_BeaconAmount", 0, 255, 1
+	StaticText "How many marines a single beacon drops.", Gray
 	
 	StaticText ""
 	StaticText "Set the specific chances of any particular item to be replaced by a custom item.", Gray
