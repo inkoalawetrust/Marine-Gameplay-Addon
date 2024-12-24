@@ -69,8 +69,8 @@ OptionMenu "Difficulty settings"
 	
 	StaticText ""
 	StaticText "The marines' abilities for each skill filter are:", Green
-	StaticText "Very Easy: No armor, half health, half damage, half sight range, terrible aim. Can't parkour, take cover, use emplacements,", Cream
-	StaticText "dodge, heal allies, use grenades, or alert other KAI humanoids of enemies. Basically a strong zombieman.", Cream
+	StaticText "Very Easy: No armor, half health, half damage, half sight range, terrible aim. Can't parkour, take cover,", Cream
+	StaticText "use emplacements, dodge, heal allies, use grenades, or alert other KAI humanoids of enemies. Basically a zombieman.", Cream
 	StaticText "Easy: Half green armor, 75HP, 25% less damage and sight range, bad aim. Can't parkour, take cover, use emplacements", Cyan
 	StaticText "can poorly dodge projectiles, and will rarely throw grenades.", Cyan
 	StaticText "Normal: 75 green armor, normal health and sight range, 25% less damage, meh aim. Can't parkour, but can take cover,", Brick
