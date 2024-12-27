@@ -595,7 +595,7 @@ Class SMGameplay_Token : Inventory
 			RubberTime = 0;
 		
 		//If you've been outta range for roughly SM_RubberTime seconds long, teleport.
-		If (RubberTime >= SM_RubberTime*GameTicRate/* && Random (0,255) < 32*/)
+		If (RubberTime >= SM_RubberTime*GameTicRate && Random (0,255) < 32)
 		{
 			Bool Stomp = Owner.bNoTelestomp;
 			Owner.bNoTelestomp = True;
