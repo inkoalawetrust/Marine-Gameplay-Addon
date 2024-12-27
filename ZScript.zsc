@@ -561,7 +561,12 @@ Class SMGameplay_Token : Inventory
 		Else
 			SM_Marine(Owner).FollowDist = 128 + FollowRandDist;
 		
-		If (!IsFrozen()) RubberbandMarine();
+		If (!IsFrozen())
+		{
+			If (!IsForMapMarine && Owner.bFriendly)
+				Owner.bNoBlockMonst = SMGameplay_NoBlockMonst;
+			RubberbandMarine();
+		}
 		
 		Super.DoEffect();
 	}

@@ -26,6 +26,10 @@ OptionMenu "Marine Gameplay Options"
 	StaticText "The color of all friendly marines", Green
 	
 	StaticText ""
+	Option "Friendly marines pass through monster blocking lines", "SMGameplay_NoBlockMonst", "OnOff"
+	StaticText "Addon friendly marines go through monster blocking lines like MBF allies do", Green
+	
+	StaticText ""
 	StaticText "Follower rubberbanding options", Gold
 	StaticText "Settings for controlling the companion mod-esque teleportation, set the time or distance to 0 to turn off", Green
 	StaticText ""
