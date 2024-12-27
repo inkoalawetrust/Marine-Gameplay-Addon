@@ -27,131 +27,131 @@ Class SMGameplay_Handler : EventHandler
 	{
 		Super.CheckReplacement (E);
 		
-		If (E.Replacee == 'Zombieman' && Random (0,255) < SMGR_Zombieman)
+		If (E.Replacee == 'Zombieman' && Random (0,255) <= SMGR_Zombieman)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True; //It's the final countdown, dooodooodooodooo, dooo-
 		}
-		Else If (E.Replacee == 'ShotgunGuy' && Random (0,255) < SMGR_Shotgunner)
+		Else If (E.Replacee == 'ShotgunGuy' && Random (0,255) <= SMGR_Shotgunner)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'ChaingunGuy' && Random (0,255) < SMGR_Chaingunner)
+		Else If (E.Replacee == 'ChaingunGuy' && Random (0,255) <= SMGR_Chaingunner)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Cacodemon' && Random (0,255) < SMGR_Cacodemon)
+		Else If (E.Replacee == 'Cacodemon' && Random (0,255) <= SMGR_Cacodemon)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'BaronOfHell' && Random (0,255) < SMGR_HellBaron)
+		Else If (E.Replacee == 'BaronOfHell' && Random (0,255) <= SMGR_HellBaron)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'HellKnight' && Random (0,255) < SMGR_HellKnight)
+		Else If (E.Replacee == 'HellKnight' && Random (0,255) <= SMGR_HellKnight)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'DoomImp' && Random (0,255) < SMGR_Imp)
+		Else If (E.Replacee == 'DoomImp' && Random (0,255) <= SMGR_Imp)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Demon' && Random (0,255) < SMGR_Pinky)
+		Else If (E.Replacee == 'Demon' && Random (0,255) <= SMGR_Pinky)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Spectre' && Random (0,255) < SMGR_Spectre)
+		Else If (E.Replacee == 'Spectre' && Random (0,255) <= SMGR_Spectre)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Revenant' && Random (0,255) < SMGR_Revenant)
+		Else If (E.Replacee == 'Revenant' && Random (0,255) <= SMGR_Revenant)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Fatso' && Random (0,255) < SMGR_Mancubus)
+		Else If (E.Replacee == 'Fatso' && Random (0,255) <= SMGR_Mancubus)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Arachnotron' && Random (0,255) < SMGR_Arachnotron)
+		Else If (E.Replacee == 'Arachnotron' && Random (0,255) <= SMGR_Arachnotron)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Archvile' && Random (0,255) < SMGR_Archvile)
+		Else If (E.Replacee == 'Archvile' && Random (0,255) <= SMGR_Archvile)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Cyberdemon' && Random (0,255) < SMGR_Cyberdemon)
+		Else If (E.Replacee == 'Cyberdemon' && Random (0,255) <= SMGR_Cyberdemon)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'SpiderMastermind' && Random (0,255) < SMGR_Mastermind)
+		Else If (E.Replacee == 'SpiderMastermind' && Random (0,255) <= SMGR_Mastermind)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'WolfensteinSS' && Random (0,255) < SMGR_Nazi)
+		Else If (E.Replacee == 'WolfensteinSS' && Random (0,255) <= SMGR_Nazi)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'LostSoul' && Random (0,255) < SMGR_LostSoul)
+		Else If (E.Replacee == 'LostSoul' && Random (0,255) <= SMGR_LostSoul)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'PainElemental' && Random (0,255) < SMGR_PainElemental)
+		Else If (E.Replacee == 'PainElemental' && Random (0,255) <= SMGR_PainElemental)
 		{
 			E.Replacement = "SMGR_Marine";
 			E.IsFinal = True;
 		}
 		
 		//Item replacements
-		If (E.Replacee == 'Chaingun' && Random (0,255) < SMGR_Rifle_Chaingun)
+		If (E.Replacee == 'Chaingun' && Random (0,255) <= SMGR_Rifle_Chaingun)
 		{
 			E.Replacement = "SM_Rifle";
 			E.IsFinal = True;
 		}
 		
 		//Beacon replacements
-		If (E.Replacee == 'Blursphere' && Random (0,255) < SMGR_Beacon_Blursphere)
+		If (E.Replacee == 'Blursphere' && Random (0,255) <= SMGR_Beacon_Blursphere)
 		{
 			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Soulsphere' && Random (0,255) < SMGR_Beacon_Soulsphere)
+		Else If (E.Replacee == 'Soulsphere' && Random (0,255) <= SMGR_Beacon_Soulsphere)
 		{
 			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Megasphere' && Random (0,255) < SMGR_Beacon_Megasphere)
+		Else If (E.Replacee == 'Megasphere' && Random (0,255) <= SMGR_Beacon_Megasphere)
 		{
 			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Infrared' && Random (0,255) < SMGR_Beacon_LiteAmp)
+		Else If (E.Replacee == 'Infrared' && Random (0,255) <= SMGR_Beacon_LiteAmp)
 		{
 			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Berserk' && Random (0,255) < SMGR_Beacon_Berserk)
+		Else If (E.Replacee == 'Berserk' && Random (0,255) <= SMGR_Beacon_Berserk)
 		{
 			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
 		}
-		Else If (E.Replacee == 'Backpack' && Random (0,255) < SMGR_Beacon_Backpack)
+		Else If (E.Replacee == 'Backpack' && Random (0,255) <= SMGR_Beacon_Backpack)
 		{
 			E.Replacement = "SMGR_Beacon";
 			E.IsFinal = True;
