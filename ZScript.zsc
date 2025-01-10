@@ -251,8 +251,10 @@ Class SMGameplay_Handler : EventHandler
 			}
 			Else
 			{
+				Console.Printf ("\c[Green] You can get info on specific commands with \"smgr_help command name\", i.e \"smgr_help sm_spawnmarine\"");
 				Console.Printf ("\c[Green] Available commands: SM_SpawnMarine");
 			}
+
 		}
 		
 		//HACK: We can't fucking update the marine colors through SMGameplay_ChangeMarineColor, too straightforward, NOOOO we have to do all this instead!
