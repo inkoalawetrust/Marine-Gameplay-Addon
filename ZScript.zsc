@@ -304,6 +304,22 @@ Class SMGameplay_Handler : EventHandler
 					Marine.User_NoReload = SMGameplay_Foe_InfiniteAmmo;
 			}
 		}
+		//Update marine voices.
+		Else If (E.Name ~== "SMG_UpdateMarineVoices")
+		{
+			ThinkerIterator MarSearch = ThinkerIterator.Create ("SMGR_Marine"); //Only addon marines.
+			SM_Marine Mar;
+			While (Mar = SM_Marine(MarSearch.Next()))
+			{
+				If (Mar)
+				{
+					If (Mar.bFriendly)
+						Mar.User_Voice = SMGameplay_Ally_Voice;
+					If (!Mar.bFriendly)
+						Mar.User_Voice = SMGameplay_Foe_Voice;
+				}
+			}
+		}
 	}
 }
 
@@ -337,6 +353,16 @@ Class SMGameplay_UpdateMarineBoolVar : CustomBoolCVAR
 			Handler.SendNetworkEvent ("SMG_UpdateMarineClipping");
 		Else If (CVarName == 'SMGameplay_Ally_InfiniteAmmo' || CVarName == 'SMGameplay_Foe_InfiniteAmmo')
 			Handler.SendNetworkEvent ("SMG_UpdateMarineInfiniteAmmo");
+		Return Val;
+	}
+}
+
+//Update the voice pack of all addon spawned marines.
+Class SMGameplay_UpdateVoice : CustomStringCVAR
+{
+	Override String ModifyValue (Name CVarName, String Val)
+	{
+		SMGameplay_Handler(EventHandler.Find("SMGameplay_Handler")).SendNetworkEvent ("SMG_UpdateMarineVoices");
 		Return Val;
 	}
 }
@@ -383,6 +409,7 @@ Class SMGameplay_Token : Inventory
 			}
 		}
 		
+		
 		SM_Marine Marine = SM_Marine(Other);
 		
 		FollowRandDist = Random (-16,48);
@@ -395,7 +422,6 @@ Class SMGameplay_Token : Inventory
 		}
 		
 		//Marine color overrides, only override if you're set to do so, and the marine doesn't already have a color, like by being map-placed.
-		//BUG: Passing an empty string to the CVAR freezes the game.
 		If (!IsForMapMarine && Marine.User_Color ~== "") 
 		{
 			If (!Marine.bFriendly)
@@ -410,16 +436,20 @@ Class SMGameplay_Token : Inventory
 			}
 		}
 		
-		//Set marine bool user vars.
+		//Set marine bool user vars. And also add voices.
 		If (!IsForMapMarine)
 		{
 			If (Marine.bFriendly)
 			{
 				Marine.User_AllyClip = SMGameplay_FriendClip;
 				Marine.User_NoReload = SMGameplay_Ally_InfiniteAmmo;
+				Marine.User_Voice = SMGameplay_Ally_Voice;
 			}
 			Else
+			{
 				Marine.User_NoReload = SMGameplay_Foe_InfiniteAmmo;
+				Marine.User_Voice = SMGameplay_Foe_Voice;
+			}
 		}
 	}
 	
@@ -611,6 +641,7 @@ Class SMGameplay_Token : Inventory
 			KAI_Actor(Owner).NextMovePos = (Double.NaN, Double.NaN, Double.NaN);
 			Owner.Angle = AngleTo(Following) + Random (35,-35); //Roughly face the follow target.
 			RubberTime = 0;
+			If (Owner Is "SM_Marine") Owner.A_StopSound (SM_Marine(Owner).CHAN_SPEECH); //Shut up when teleporting to well, keep it silent.
 		}
 	}
 	

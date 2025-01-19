@@ -30,6 +30,14 @@ OptionMenu "Marine Gameplay Options"
 	StaticText "Addon friendly marines go through monster blocking lines like MBF allies do", Green
 	
 	StaticText ""
+	StaticText "The marines only have one built-in voice called \"HECU\", to make more yourself check here:"
+	StaticText "https://github.com/inkoalawetrust/Smart-Marines/wiki/Speaking#setting-up-your-own-voice-packs"
+	TextField "Enemy marine voice", "SMGameplay_Foe_Voice"
+	StaticText "The KAI voice pack of all enemy addon marines", Green
+	TextField "Enemy marine voice", "SMGameplay_Ally_Voice"
+	StaticText "The KAI voice pack of all friendly addon marines", Green
+	
+	StaticText ""
 	StaticText "Follower rubberbanding options", Gold
 	StaticText "Settings for controlling the companion mod-esque teleportation, set the time or distance to 0 to turn off", Green
 	StaticText ""

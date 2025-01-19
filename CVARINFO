@@ -57,6 +57,9 @@ Server HandlerClass (SMGameplay_UpdateMarineBoolVar) Bool SMGameplay_FriendClip 
 Server HandlerClass (SMGameplay_UpdateMarineBoolVar) Bool SMGameplay_Ally_InfiniteAmmo = False; //Friendly addon-spawned marines have bottomless magazines.
 Server HandlerClass (SMGameplay_UpdateMarineBoolVar) Bool SMGameplay_Foe_InfiniteAmmo = False; //Enemy addon-spawned marines have bottomless magazines.
 
+Server HandlerClass (SMGameplay_UpdateVoice) String SMGameplay_Ally_Voice = "";
+Server HandlerClass (SMGameplay_UpdateVoice) String SMGameplay_Foe_Voice = "";
+
 //Marine action restrictions, take precedence over SMGameplay_PowerScaling. i.e if taking cover isn't allowed, It's NEVER used
 Server Bool SMGRestrict_Cover = False;
 Server Bool SMGRestrict_Climb = False;
