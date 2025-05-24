@@ -2,13 +2,14 @@ Version "4.12"
 
 //TODO:
 //Add a setting to make the marine that replaces a specific class try to generally conform to its' threat level. i.e zombieman-replacing marines are weak as shit
+//Obsidian support. A setting to replace the Obsidian marine followers (And enemy ZDoom marines) with marines. And controls for what marines to replace, i.e only mid-tech ones.
 
 //IDEA:
 //A hotkey to be able to order marines and other KAI NPCs from further away? Not sure how it'd work, an InputEvent or something?
 //For item and monster replacements, try adding some kind of custom field for each for inserting custom classes to replace and the chance of doing so?
 //God fucking help me. A way to have MARINES PERSIST ACROSS MAPS?
 
-Class SMGR_Marine : SM_Marine{}
+Class SMGR_Marine : SM_Marine{} //This is a marine spawned from the addon.
 
 Class SMGameplay_Handler : EventHandler
 {
@@ -201,7 +202,7 @@ Class SMGameplay_Handler : EventHandler
 			{
 				If (Command.Size() > 1 && Command[1] ~== "Friend") //If the first parameter after the command name is "friend", the marine is supposed to be friendly.
 				{
-					Marine.bFriendly = True;
+					Marine.A_SetFriendly(True);
 					Marine.SetFriendPlayer(PlrMo.Player);
 				}
 				
@@ -569,7 +570,7 @@ Class SMGameplay_Token : Inventory
 		If (Owner && !Owner.bFriendly)
 			Return;
 		
-		//Scale the friendly fire damage friendly marines receive from ally.
+		//Scale the friendly fire damage friendly marines receive from allies.
 		If (Passive && Damage > 0 && Source && (Source.Player || Source.bFriendly))
 			NewDamage *= SMGameplay_FriendDamageMul;
 	}
@@ -597,6 +598,8 @@ Class SMGameplay_Token : Inventory
 		{
 			If (!IsForMapMarine && Owner.bFriendly)
 				Owner.bNoBlockMonst = SMGameplay_NoBlockMonst;
+			If (!IsForMapMarine && Owner.bFriendly)
+				SM_Marine(Owner).Standby = SMGameplay_Standby;
 			RubberbandMarine();
 		}
 		

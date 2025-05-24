@@ -30,6 +30,11 @@ OptionMenu "Marine Gameplay Options"
 	StaticText "Addon friendly marines go through monster blocking lines like MBF allies do", Green
 	
 	StaticText ""
+	Option "Friendly marines stop when too close to the player", "SMGameplay_Standby", "OnOff"
+	StaticText "Addon friendly marines will stop moving entirely when close enough to the player", Green
+	StaticText "(Or any other follow target), normally they'll just try to wander out of the way.", Green
+	
+	StaticText ""
 	StaticText "The marines only have one built-in voice called \"HECU\", to make more yourself check here:"
 	StaticText "https://github.com/inkoalawetrust/Smart-Marines/wiki/Speaking#setting-up-your-own-voice-packs"
 	TextField "Enemy marine voice", "SMGameplay_Foe_Voice"
@@ -87,7 +92,7 @@ OptionMenu "Difficulty settings"
 	StaticText "can poorly dodge projectiles, and will rarely throw grenades.", Cyan
 	StaticText "Normal: 75 green armor, normal health and sight range, 25% less damage, meh aim. Can't parkour, but can take cover,", Brick
 	StaticText "can decently dodge projectiles, sometimes uses grenades, takes twice as long to use turrets or heal allies", Brick
-	StaticText "can alert allies of enemies at half range", Brick
+	StaticText "can alert allies of enemies at half range.", Brick
 	StaticText "Hard: Normal marines, no stat debuffs, can use all abilities and attacks normally.", Green
 	StaticText "Very Hard: 210 health, 200 blue armor, maximum marine height and width, more likely to throw grenades,", Fire
 	StaticText "heals allies 4 times as fast, moves slightly faster, can reload and climb twice as fast, and perfect aim.", Fire

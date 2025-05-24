@@ -46,6 +46,7 @@ Server Bool SMGameplay_NerfEnemyMarines = False;
 Server Bool SMGameplay_NerfFriendMarines = False;
 
 Server Bool SMGameplay_NoBlockMonst = False;
+Server Bool SMGameplay_Standby = False;
 
 Server Bool SMGameplay_SkillScaling = True; //Skill based matchmaking.
 Server Int SMGameplay_SkillFilter	= 0; //An exact skill filter/level to use for SkillScaling instead of the maps'.
