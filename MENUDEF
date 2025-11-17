@@ -11,6 +11,7 @@ OptionMenu "Marine Gameplay Options"
     Submenu "Monster replacements", "Monster replacements"
 	Submenu "Item replacements", "Item replacements"
 	Submenu "Marine CVARs", "Marine CVARs"
+	Submenu "Restricted actions", "Restricted actions"
 	
 	StaticText ""
 	StaticText "Marine color options", Blue
@@ -116,8 +117,6 @@ OptionMenu "Difficulty settings"
 	StaticText "Makes all addon-based hostile marines have infinite ammunition.", Green
 	Option "Friendly marines phase through allies", "SMGameplay_FriendClip", "OnOff"
 	StaticText "Makes all addon-based friendly marines able to walk straight through allies.", Green
-	
-	Submenu "Restricted actions", "Restricted actions"
 }
 
 //Things the marines shouldn't be able to do.
@@ -218,7 +217,7 @@ OptionMenu "Marine CVARs"
 	Option "Don't turn on +DOSHADOWBLOCK for monsters", "SM_Disable_DoShadowblock", "OnOff"
 	StaticText "Disables turning on the +DOSHADOWBLOCK flag for NPCs, which is needed for the smokescreens to work", Green
 	Option "Simple marine fire mode check", "SM_DumbHitCheck", "OnOff"
-	StaticText "Instead of firing traces to determine how many hits they will land on a target, marines will use pure math, should be faster", Green
+	StaticText "Simpler math based fire mode check instead of traces, should be faster with a lot of marines.", Green
 	Option "Enable flashbang ringing", "SM_FlashbangSound", "OnOff"
 	StaticText "Set to off to disable the flashbang grenades' ringing, in case the sound is too painful", Green
 }
